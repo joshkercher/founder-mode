@@ -101,10 +101,14 @@ input.namein:focus{border-color:var(--ac)}
 #youHead .av2{font-size:34px;width:58px;height:58px;display:flex;align-items:center;justify-content:center;border-radius:16px;background:var(--card2)}
 #youHead .nm{font-family:var(--serif);font-size:18px}
 #youHead .tr{font-size:11.5px;color:var(--ac)}
-.teamline{display:flex;justify-content:space-between;font-size:12.5px;padding:6px 0;border-bottom:1px dashed var(--line);color:var(--dim)}
+.teamline{display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:7px 0;border-bottom:1px dashed var(--line);color:var(--dim);gap:8px}
 .teamline b{color:var(--txt);font-weight:600}
+.skillmini{flex:1;height:4px;border-radius:99px;background:var(--card2);overflow:hidden;min-width:30px}
+.skillmini i{display:block;height:100%;background:#60a5fa}
 .debtline{display:flex;justify-content:space-between;font-size:12.5px;padding:6px 0;color:var(--dim)}
 .debtline b{color:var(--bad)}
+.cashline{display:flex;justify-content:space-between;font-size:12.5px;padding:6px 0;color:var(--dim);border-bottom:1px dashed var(--line)}
+.cashline b{color:var(--txt);font-variant-numeric:tabular-nums}
 #actionsGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 @media(max-width:700px){#actionsGrid{grid-template-columns:repeat(2,1fr)}}
 .act{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;cursor:pointer;transition:all .15s;text-align:left;color:var(--txt);font-family:var(--sans)}
@@ -128,7 +132,7 @@ input.namein:focus{border-color:var(--ac)}
 #plPanel tr.net td{border-top:1px solid var(--line);padding-top:9px;font-weight:700;color:var(--txt);font-size:14px}
 #sparkWrap{margin-top:6px}
 #spark{width:100%;height:64px;display:block}
-#logPanel{max-height:280px;overflow-y:auto}
+#logPanel{max-height:240px;overflow-y:auto}
 .logline{font-size:12px;color:var(--dim);padding:7px 0;border-bottom:1px dashed var(--line);line-height:1.5}
 .logline b{color:var(--ac);font-weight:600}
 
@@ -136,7 +140,7 @@ input.namein:focus{border-color:var(--ac)}
 #modalRoot{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(5,5,10,.78);z-index:50;backdrop-filter:blur(6px)}
 #modalRoot.on{display:flex}
 #modalBox{background:var(--card);border:1px solid color-mix(in srgb,var(--ac) 35%,var(--line));border-radius:22px;
-  max-width:560px;width:92%;padding:34px;max-height:86vh;overflow-y:auto;animation:pop .3s ease}
+  max-width:580px;width:92%;padding:34px;max-height:86vh;overflow-y:auto;animation:pop .3s ease}
 @keyframes pop{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
 #modalBox h3{font-family:var(--serif);font-size:26px;margin-bottom:14px;font-weight:600;line-height:1.25}
 #modalBox .body{color:var(--dim);font-size:14px;line-height:1.7}
@@ -146,11 +150,17 @@ input.namein:focus{border-color:var(--ac)}
 #modalBox .lesson::before{content:'💡 LESSON';display:block;font-size:10px;letter-spacing:.25em;color:var(--ac);margin-bottom:6px;font-weight:700}
 #modalBox .btns{display:flex;flex-direction:column;gap:10px;margin-top:24px}
 #modalBox .btns .btn{width:100%;text-align:center}
-#modalBox .btns .hint{font-size:11px;color:var(--dim);text-align:center;margin-top:-4px}
 #modalBox table.pl{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:14px}
 #modalBox table.pl td{padding:7px 0;color:var(--dim);border-bottom:1px dashed var(--line)}
-#modalBox table.pl td:last-child{text-align:right;font-variant-numeric:tabular-nums;color:var(--txt)}
+#modalBox table.pl td:last-child{text-align:right;font-variant-numeric:tabular-nums;color:var(--txt);white-space:nowrap}
 #modalBox table.pl tr.net td{font-weight:800;font-size:17px;border-bottom:none;padding-top:12px}
+.flagBtn{display:inline-block;background:color-mix(in srgb,var(--bad) 18%,transparent);border:1px solid color-mix(in srgb,var(--bad) 50%,transparent);
+  color:#fca5a5;font-size:10.5px;font-weight:700;border-radius:99px;padding:3px 10px;cursor:pointer;margin-left:8px;font-family:var(--sans)}
+.flagBtn:active{transform:scale(.95)}
+.flagBtn.dim{opacity:.4;cursor:not-allowed}
+.attChips{display:flex;gap:6px;align-items:center;margin:10px 0 4px;font-size:11.5px;color:var(--dim)}
+.attDot{width:12px;height:12px;border-radius:50%;background:var(--ac)}
+.attDot.used{background:var(--card2);border:1px solid var(--line)}
 #toastRoot{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:60;display:flex;flex-direction:column;gap:10px;align-items:center}
 .toast{background:var(--card2);border:1px solid color-mix(in srgb,var(--ac) 45%,transparent);color:var(--txt);
   padding:12px 26px;border-radius:999px;font-size:13.5px;box-shadow:0 10px 40px rgba(0,0,0,.5);animation:toastIn .3s ease}
@@ -196,7 +206,7 @@ body{padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-ri
   .chip{font-size:10px;padding:4px 10px}
   #cashVal{font-size:21px}
   #gamegrid{grid-template-columns:1fr;gap:14px}
-  #gamegrid>div:nth-child(2){order:-1}  /* actions first on phone */
+  #gamegrid>div:nth-child(2){order:-1}
   #actionsGrid{grid-template-columns:repeat(2,1fr);gap:10px}
   .act{padding:13px}
   .act .em{font-size:21px}
@@ -219,7 +229,7 @@ body{padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-ri
   <div style="margin-top:9vh"></div>
   <h1 class="logo">FOUNDER MODE</h1>
   <div class="tagline">Build the business. Then escape it.</div>
-  <p class="sub">A tycoon-style sim about the decisions that set you free — and the ones that quietly trap you. Grow revenue, sure. But the real score is whether your business can survive <b style="color:var(--txt)">thirty days without you</b>.</p>
+  <p class="sub">A tycoon-style sim about the decisions that set you free — and the ones that quietly trap you. Read your books, build your people, mind your cash. The real score is whether your business can survive <b style="color:var(--txt)">thirty days without you</b>.</p>
   <div class="navrow">
     <button class="btn" onclick="newGame()">New Game</button>
     <button class="btn ghost" id="contBtn" style="display:none" onclick="continueGame()">Continue</button>
@@ -310,7 +320,6 @@ body{padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-ri
       <div class="panel">
         <h4>The Business</h4>
         <div class="statrow"><div class="top"><span>⭐ Reputation</span><b id="vRep"></b></div><div class="bar"><i id="bRep"></i></div></div>
-        <div class="statrow"><div class="top"><span>🎓 Team Skill</span><b id="vSkill"></b></div><div class="bar b"><i id="bSkill"></i></div></div>
         <div class="statrow"><div class="top"><span>🧩 Systems</span><b id="vSys"></b></div><div class="bar b"><i id="bSys"></i></div></div>
         <div id="teamList" style="margin-top:14px"></div>
         <div id="debtList" style="margin-top:10px"></div>
@@ -329,10 +338,14 @@ body{padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-ri
       <button class="btn" id="endBtn" onclick="endMonth()">END MONTH ▸</button>
     </div>
     <div>
-      <div class="panel" id="plPanel">
-        <h4>Last Month P&amp;L</h4>
-        <table id="plTable"><tr><td colspan="2" style="color:var(--dim)">Your first month awaits.</td></tr></table>
+      <div class="panel" id="cashPanel">
+        <h4>Cash Position</h4>
+        <div id="cashLines"></div>
         <div id="sparkWrap"><canvas id="spark"></canvas></div>
+      </div>
+      <div class="panel" id="plPanel">
+        <h4>Last Close</h4>
+        <table id="plTable"><tr><td colspan="2" style="color:var(--dim)">Your first month awaits.</td></tr></table>
       </div>
       <div class="panel" id="logPanel">
         <h4>The Story So Far</h4>
@@ -355,37 +368,37 @@ const rnd=a=>a[Math.floor(Math.random()*a.length)];
 /* ================= DATA ================= */
 const AVATARS=['🧑‍🎨','👩‍💼','🧔🏽','👩🏾‍🦱','🧕','👨🏻‍💼','👱‍♀️','🧑🏽‍🦰'];
 const TRAITS=[
- {key:'craft',name:'The Craftsman',emoji:'✂️',desc:'Obsessed with quality. Reputation grows 30% faster — but letting go is agony. Systems cost you more to build.'},
+ {key:'craft',name:'The Craftsman',emoji:'✂️',desc:'Obsessed with quality. Your personal work builds reputation faster — but letting go is agony. Systems cost you more to build.'},
  {key:'hustler',name:'The Hustler',emoji:'📣',desc:'Born seller. Marketing hits 40% harder and demand comes easy — but quality slips when you\'re not watching.'},
- {key:'operator',name:'The Operator',emoji:'🧩',desc:'Systems thinker. SOPs, playbooks and training go 40% further. Less flash, more freedom.'},
- {key:'numbers',name:'The Numbers Person',emoji:'🧮',desc:'You speak spreadsheet. Interest rates run 30% cheaper for you, and overhead stays lean.'},
+ {key:'operator',name:'The Operator',emoji:'🧩',desc:'Systems thinker. SOPs, playbooks and training go further. Less flash, more freedom.'},
+ {key:'numbers',name:'The Numbers Person',emoji:'🧮',desc:'You speak spreadsheet. Interest runs 30% cheaper, back office costs less, and anomalies are easier to spot.'},
 ];
 const BIZ=[
  {key:'fashion',name:'Bespoke Fashion House',emoji:'🧵',accent:'#d4af37',suggest:'MAISON NOIR',unit:'commissions',
   price:2600,cost:800,ownerCap:5,staffCap:4,baseDemand:2,repDemand:0.22,buildout:8000,staffSalary:4200,role:'Tailor',
   desc:'Low volume, sky-high margins. Every client is a relationship. Scales through craft talent — the hardest kind to hire.',
-  tags:['High margin','Hard to delegate','Relationship-driven'],
-  intro:'A bolt of cloth, a pair of shears, and a reputation to build one client at a time. In this business, trust is the product — the garment is just the proof.'},
+  tags:['High margin','Hard to delegate','Relationship-driven'],splitNow:0.55,
+  intro:'A bolt of cloth, a pair of shears, and a reputation to build one client at a time. Clients pay a deposit up front — the balance lands when the garment does.'},
  {key:'coffee',name:'Specialty Coffee Bar',emoji:'☕',accent:'#c4813d',suggest:'DAILY RITUAL',unit:'orders',
   price:9,cost:3.2,ownerCap:1500,staffCap:1700,baseDemand:900,repDemand:55,buildout:25000,staffSalary:3000,role:'Barista',
   desc:'A volume game with razor-thin margins. Location is everything, and systems decide who survives year two.',
-  tags:['Thin margins','Location-driven','Very systemizable'],
-  intro:'The espresso machine gleams. The margins don\'t. In coffee, the difference between thriving and dying is about 40 cents a cup — and whoever builds the tightest system wins.'},
+  tags:['Thin margins','Location-driven','Very systemizable'],splitNow:1,
+  intro:'The espresso machine gleams. The margins don\'t. In coffee the difference between thriving and dying is about 40 cents a cup.'},
  {key:'creator',name:'Creator Studio',emoji:'🎬',accent:'#a78bfa',suggest:'SIGNAL STUDIO',unit:'projects',
   price:5200,cost:1400,ownerCap:4,staffCap:3,baseDemand:1,repDemand:0.18,buildout:6000,staffSalary:4500,role:'Producer',
-  desc:'You sell attention. Feast or famine — reputation IS the product, and burnout is the final boss.',
-  tags:['Reputation-driven','Volatile','You ARE the brand'],
-  intro:'Brand deals, content, audience. The good news: your ceiling is unlimited. The bad news: right now, every dollar this studio makes flows through your calendar.'},
+  desc:'You sell attention. Feast or famine — reputation IS the product, and burnout is the final boss. Brands pay net-45.',
+  tags:['Reputation-driven','Volatile','You ARE the brand'],splitNow:0.35,
+  intro:'Brand deals, content, audience. The good news: your ceiling is unlimited. The bad news: brands pay you 45 days late.'},
  {key:'fitness',name:'Boutique Fitness Studio',emoji:'🏋️',accent:'#34d399',suggest:'PULSE CLUB',unit:'members',
   price:165,cost:25,ownerCap:70,staffCap:110,baseDemand:35,repDemand:4.5,buildout:18000,staffSalary:3400,role:'Coach',
   desc:'Recurring revenue and real community. But members churn the moment the energy dips.',
-  tags:['Recurring revenue','Community','Churn risk'],
-  intro:'Memberships are the most beautiful revenue in business — it shows up every month. Your job: build a place people can\'t quit, run by coaches who aren\'t you.'},
+  tags:['Recurring revenue','Community','Churn risk'],splitNow:1,
+  intro:'Memberships are the most beautiful revenue in business — it shows up every month. Your job: build a place people can\'t quit.'},
  {key:'app',name:'AI Software Startup',emoji:'🤖',accent:'#60a5fa',suggest:'STACK LABS',unit:'subscribers',
   price:39,cost:6,ownerCap:250,staffCap:700,baseDemand:80,repDemand:35,buildout:4000,staffSalary:7500,role:'Engineer',
   desc:'A slow, brutal start — then the curve bends. The only business here that truly scales without you. Talent is expensive.',
-  tags:['Scales infinitely','Slow start','Expensive talent'],
-  intro:'Code doesn\'t sleep, doesn\'t churn, doesn\'t call in sick. If you survive the early desert, this is the one business that can genuinely run itself. IF you survive.'},
+  tags:['Scales infinitely','Slow start','Expensive talent'],splitNow:1,
+  intro:'Code doesn\'t sleep, doesn\'t churn, doesn\'t call in sick. If you survive the early desert, this is the one business that can genuinely run itself.'},
 ];
 const FUND=[
  {key:'boot',name:'Bootstrap',emoji:'🥾',cash:15000,desc:'Your own savings. Zero strings, zero safety net. Constraints will force focus.'},
@@ -400,21 +413,65 @@ const LOC=[
  {key:'street',name:'Main Street Storefront',emoji:'🏬',rent:4500,traffic:1.65,prestige:8,repCap:100,desc:'Maximum visibility, maximum overhead. The rent is due whether anyone walks in or not.'},
  {key:'showroom',name:'Private Showroom',emoji:'🥂',rent:2800,traffic:0.95,prestige:14,repCap:100,marginBonus:1.22,desc:'By appointment only. Fewer eyes, deeper pockets — clients pay a premium for the experience.'},
 ];
+const BOOKS=[
+ {name:'Shoebox of receipts',cost:0,att:1,desc:'You, a spreadsheet, and good intentions. 1 thing investigated per close.'},
+ {name:'Bookkeeper',cost:450,att:2,desc:'Clean statements, two investigations per close, and a real cash forecast.'},
+ {name:'Accountant',cost:1100,att:2,hint:true,taxMult:0.85,desc:'Flags come with the likely cause. Tax bill −15%.'},
+ {name:'Fractional CFO',cost:2600,att:3,hint:true,taxMult:0.8,auto:true,desc:'Three investigations, causes named, and the first issue each month gets handled for you.'},
+];
 const LEVELS=[[0,'Garage Era'],[15000,'Local Favorite'],[40000,'On the Map'],[100000,'Regional Player'],[250000,'National Brand'],[600000,'Icon']];
 const STAFFNAMES=['Maya','Diego','Priya','Sam','Lena','Marcus','Yuki','Tess','Omar','Nia','Felix','June','Cole','Aria','Theo','Zara'];
+
+/* ===== ANOMALIES (the books fight back) ===== */
+const ANOMS=[
+ {id:'vendor',line:'cogs',label:'Materials running over plan',cause:'Your main supplier quietly raised prices — nobody compared invoices.',
+  drain:s=>Math.max(150,s.lastRev*0.05),
+  fixes:[{label:'Renegotiate / switch suppliers',fn(l){killLeak(l);lesson('The quiet price creep','Vendors count on you not reading invoices. A 5% creep on COGS is half your profit margin gone — caught only by people who close their books.')}},
+         {label:'Leave it — no time',fn(){}}]},
+ {id:'discount',line:'revenue',label:'Revenue per sale slipping',cause:'Your team has been quietly discounting to close sales.',need:s=>s.staff.length>0,
+  drain:s=>Math.max(180,s.lastRev*0.045),
+  fixes:[{label:'Set a written pricing policy (+2 systems)',fn(l){killLeak(l);S.systems=clamp(S.systems+2,0,100);lesson('Discounting is invisible until you look','Every "just this once" discount felt like good service. Together they were a hole in the boat. Policy beats willpower.')}},
+         {label:'Let them use their judgment',fn(){}}]},
+ {id:'shrink',line:'opex',label:'Petty cash doesn\'t reconcile',cause:'Small amounts of cash and product have been walking out the door.',need:s=>s.staff.length>=2,
+  drain:()=>420,
+  fixes:[{label:'Install controls (+3 systems, $800)',fn(l){if(S.cash<800){toast('Not enough cash');return}S.cash-=800;killLeak(l);S.systems=clamp(S.systems+3,0,100);
+      lesson('Trust, but reconcile','Good controls aren\'t about distrust — they remove the temptation and protect the honest. Shrinkage thrives exactly where nobody counts.')}},
+         {label:'Confront the team directly',fn(l){killLeak(l);if(S.staff.length&&Math.random()<0.5){const p=S.staff.shift();
+      queueInfo('🚪 '+p.name+' walked out','"You think I\'m a thief?" Maybe they were. Maybe they weren\'t. Either way, the accusation cost you a '+bizOf().role+'.',
+      'Accusations without process burn trust. Controls catch problems without making it personal.');}else lesson('A tense meeting','The shrinkage stopped. So did the laughter in the back room, for a while.')}}]},
+ {id:'subs',line:'opex',label:'Operations creeping upward',cause:'Software subscriptions and small recurring charges have piled up.',
+  drain:()=>290,
+  fixes:[{label:'Audit and cancel the zombies',fn(l){killLeak(l);lesson('The subscription graveyard','$29 here, $49 there — nobody decision was wrong, and together they were a part-time salary. Audit recurring charges quarterly.')}},
+         {label:'They\'re probably all needed',fn(){}}]},
+ {id:'equip',line:'opex',label:'Utilities & maintenance trending up',cause:'A key piece of equipment is wearing out — it\'s drawing power and slowing down.',
+  drain:()=>240,breakAt:3,
+  fixes:[{label:'Preventive maintenance ($900)',fn(l){if(S.cash<900){toast('Not enough cash');return}S.cash-=900;killLeak(l);
+      lesson('Maintenance is cheaper than rescue','Equipment fails on its own schedule unless you put it on yours. $900 today or $4,500 at the worst possible moment.')}},
+         {label:'Run it till it breaks',fn(){}}]},
+ {id:'refunds',line:'revenue',label:'Refunds & redos climbing',cause:'Quality is slipping on work done by your greenest people.',need:s=>s.staff.some(p=>p.skill<40),
+  drain:s=>Math.max(200,s.lastRev*0.04),
+  fixes:[{label:'Pull them in for focused training ($600, ⚡10)',fn(l){if(S.cash<600||S.energy<10){toast('Need $600 and ⚡10');return}
+      S.cash-=600;S.energy-=10;killLeak(l);S.staff.forEach(p=>{if(p.skill<40)p.skill=clamp(p.skill+7,0,100)});
+      lesson('Quality is a training line-item','Every redo costs you twice: the labor, and a customer who tells the story. Green people don\'t get better by being thrown at customers.')}},
+         {label:'It\'ll sort itself out',fn(){}}]},
+];
 
 /* ================= STATE ================= */
 let S=null;
 let sel={avatar:null,trait:null,biz:null,fund:null,loc:null};
-let MQ=[]; // modal queue
+let MQ=[];
 const bizOf=()=>BIZ.find(b=>b.key===S.biz);
 const locOf=()=>LOC.find(l=>l.key===S.loc);
 const trOf=()=>TRAITS.find(t=>t.key===S.trait);
+const avgSkill=()=>S.staff.length?S.staff.reduce((a,p)=>a+p.skill,0)/S.staff.length:0;
+const avgMorale=()=>S.staff.length?S.staff.reduce((a,p)=>a+p.morale,0)/S.staff.length:70;
+const payrollOf=()=>S.staff.reduce((a,p)=>a+p.salary,0);
+function killLeak(l){S.leaks=S.leaks.filter(x=>x!==l)}
+function lesson(title,text){queueInfo(title,'',text)}
 
 /* ================= SETUP SCREENS ================= */
 function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));$(id).classList.add('on');window.scrollTo(0,0)}
 function newGame(){sel={avatar:null,trait:null,biz:null,fund:null,loc:null};buildCharScreen();show('sc-char')}
-
 function buildCharScreen(){
   $('avGrid').innerHTML=AVATARS.map(a=>`<div class="av" data-a="${a}" onclick="pickAv('${a}')">${a}</div>`).join('');
   $('traitGrid').innerHTML=TRAITS.map(t=>`<div class="card" id="tr-${t.key}" onclick="pickTrait('${t.key}')">
@@ -453,7 +510,7 @@ function goLoc(){
       <div class="meta"><span class="tag">Rent ${fmt(l.rent)}/mo</span><span class="tag">Traffic ×${l.traffic}</span>${l.marginBonus?'<span class="tag gold">+22% pricing</span>':''}</div>
       <div class="money">${ok?'Cash after setup: '+fmt(left):'⚠︎ Can\'t afford — need '+fmt(setup+1000)}</div></div>`;
   }).join('');
-  $('locSub').textContent='Buildout ('+fmt(biz.buildout)+') plus a 2-month deposit come out of your '+fmt(fund.cash)+'. Rent is the loudest fixed cost you\'ll ever sign.';
+  $('locSub').textContent='Buildout ('+fmt(biz.buildout)+') plus a 2-month deposit come out of your '+fmt(fund.cash)+'.';
   show('sc-loc');
 }
 function pickLoc(k){sel.loc=k;LOC.forEach(l=>{const e=$('lc-'+l.key);if(e)e.classList.toggle('sel',l.key===k)})}
@@ -483,12 +540,13 @@ function startGame(){
     month:0,cash:fund.cash-setup,
     debts:fund.debt?[JSON.parse(JSON.stringify(fund.debt))]:[],
     equity:fund.equity?1-fund.equity:1,investorTrust:70,
-    energy:100,rep:12+loc.prestige,teamSkill:0,systems:0,staff:[],
+    energy:100,rep:12+loc.prestige,systems:0,staff:[],
     priceMult:1,demandMult:1,mktMonths:0,grind:false,forcedRest:false,
-    rentMult:1,burnouts:0,profitStreak:0,yearProfit:0,
-    history:[],revHist:[],lessons:[],ach:{},receivables:[],log:[],
-    lineCooldown:0,evCool:{},negMonths:0,paydayOffered:false,fnfAsked:false,
-    lastInvCheck:0,lastRevCheck:0,dep:90,over:false,won:false,lastR:null,quitRisk:false,
+    rentMult:1,burnouts:0,profitStreak:0,
+    books:0,leaks:[],receivables:[],taxAccrued:0,quarterProfit:0,missedPayroll:0,
+    lastRev:8000,history:[],revHist:[],lessons:[],ach:{},log:[],
+    lineCooldown:0,evCool:{},paydayOffered:false,fnfAsked:false,
+    lastInvCheck:0,dep:90,over:false,won:false,lastR:null,
   };
   document.documentElement.style.setProperty('--ac',biz.accent);
   S.history.push(S.cash);
@@ -496,8 +554,8 @@ function startGame(){
   show('sc-game');
   render();
   queueInfo('🏁 '+S.brand+' is open for business',
-    biz.intro+'<br><br><b>How to win:</b> grow your <b>Freedom</b> (the % of the business that runs without you) above 65, get <b>Systems</b> above 50, and string together <b>3 profitable months</b>. Then take <b>The 30-Day Test</b> — a full month off. If the business profits without you, you\'ve escaped the rat race.<br><br><b>How to lose:</b> run out of cash, or run out of yourself.',
-    'Revenue is vanity, profit is sanity, freedom is the actual goal.');
+    biz.intro+'<br><br><b>How to win:</b> grow your <b>Freedom</b> above 65, get <b>Systems</b> above 60, train your team past <b>55 skill</b>, and string together <b>4 profitable months</b>. Then take <b>The 30-Day Test</b>.<br><br><b>How it goes wrong:</b> cash that runs out, payroll you can\'t make, books you never read, people you hired and never trained — and you.',
+    'Revenue is vanity, profit is sanity, cash is reality, freedom is the actual goal.');
   pump();
   save();
 }
@@ -505,32 +563,37 @@ function startGame(){
 /* ================= ACTIONS ================= */
 const ACTIONS=[
  {key:'grind',emoji:'🔥',name:'Grind',en:25,cash:0,
-  desc:'Throw yourself at the work. +60% personal output this month — and the business learns to need you.',
+  desc:'Throw yourself at the work. +60% personal output, top quality — and the business learns to need you. Your team notices.',
   can:()=>!S.grind&&!S.forcedRest,
-  run(){S.grind=true;logLine('M'+(S.month+1),'You worked nights and weekends.')}},
- {key:'mkt',emoji:'📣',name:'Marketing Push',en:10,cash:1500,
+  run(){S.grind=true;S.staff.forEach(p=>p.morale=clamp(p.morale-2,0,100));logLine('M'+(S.month+1),'You worked nights and weekends.')}},
+ {key:'mkt',emoji:'📣',name:'Marketing Push',en:10,cash:1800,
   desc:'Ads, content, outreach. Demand jumps for the next 2 months.',
   run(){S.mktMonths=2;logLine('M'+(S.month+1),'Marketing campaign launched.')}},
- {key:'hire',emoji:'🤝',name:'Hire',en:15,cash:1200,
-  desc:'Recruit one team member. They start green — salary runs monthly whether they produce or not.',
+ {key:'hire',emoji:'🤝',name:'Hire',en:15,cash:1500,
+  desc:'Recruit one team member. They start green — output at ~30% until trained. Salary runs from day one.',
   can:()=>S.staff.length<12,
   run(){const b=bizOf();const n=rnd(STAFFNAMES.filter(x=>!S.staff.some(s=>s.name===x)))||'Alex';
-    S.staff.push({name:n,role:b.role,salary:b.staffSalary,loyal:false});
-    logLine('M'+(S.month+1),'Hired <b>'+n+'</b> as a '+b.role+'.');
+    S.staff.push({name:n,role:b.role,salary:b.staffSalary,skill:16+Math.floor(Math.random()*12),morale:72,monthsIn:0,loyal:false});
+    logLine('M'+(S.month+1),'Hired <b>'+n+'</b> as a '+b.role+'. Green as spring.');
     if(!S.ach.firstHire){S.ach.firstHire=1;toast('🏆 First Hire — you\'re officially a boss')}}},
- {key:'train',emoji:'🎓',name:'Train the Team',en:15,cash:600,
-  desc:'Coaching, reps, standards. Your people produce more — and stay longer.',
-  can:()=>S.staff.length>0&&S.teamSkill<100,
-  run(){S.teamSkill=clamp(S.teamSkill+8,0,100);S.quitRisk=false;logLine('M'+(S.month+1),'Team training day. Skill rising.')}},
- {key:'sys',emoji:'🧩',name:'Build Systems',en:20,cash:400,
-  desc:'SOPs, playbooks, checklists. The business slowly stops needing your hands on everything.',
+ {key:'train',emoji:'🎓',name:'Train the Team',en:15,cash:800,
+  desc:'Coaching, reps, standards. Skill +6, morale +4. The only cure for the green-team quality dip.',
+  can:()=>S.staff.length>0,
+  run(){const g=S.trait==='operator'?8:6;
+    S.staff.forEach(p=>{p.skill=clamp(p.skill+g,0,100);p.morale=clamp(p.morale+4,0,100)});
+    logLine('M'+(S.month+1),'Team training day. Skill rising.')}},
+ {key:'sys',emoji:'🧩',name:'Build Systems',en:20,cash:500,
+  desc:'SOPs, playbooks, checklists. Systems decay without maintenance — this is how you fight rot.',
   can:()=>S.systems<100,
-  run(){let g=7;if(S.trait==='operator')g=10;if(S.trait==='craft')g=5;
+  run(){let g=6;if(S.trait==='operator')g=9;if(S.trait==='craft')g=4;
     S.systems=clamp(S.systems+g,0,100);logLine('M'+(S.month+1),'You wrote down how the magic works. Systems +'+g+'.')}},
+ {key:'books',emoji:'🗂️',name:'Back Office',en:5,cash:0,
+  desc:'Upgrade your bookkeeping. Better books = more anomalies caught at close, better forecasts, smaller tax bills.',
+  run(){openBooksModal()}},
  {key:'price',emoji:'🏷️',name:'Raise Prices',en:5,cash:0,
   desc:'+8% pricing. Some customers walk — the right ones stay. Risky if your reputation is weak.',
-  run(){S.priceMult*=1.08;S.demandMult*=(S.rep>=40?0.96:0.90);
-    logLine('M'+(S.month+1),'Prices up 8%. '+(S.rep>=40?'Your reputation carried it.':'A few customers grumbled off.'))}},
+  run(){S.priceMult*=1.08;S.demandMult*=(S.rep>=45?0.95:0.88);
+    logLine('M'+(S.month+1),'Prices up 8%. '+(S.rep>=45?'Your reputation carried it.':'A few customers grumbled off.'))}},
  {key:'debt',emoji:'💸',name:'Pay Down Debt',en:5,cash:0,
   desc:'Throw up to $5,000 extra at your most expensive debt.',
   can:()=>S.debts.length>0&&S.cash>1000,
@@ -553,7 +616,7 @@ const ACTIONS=[
 let actLock=0;
 function tryAction(k,ev){
   if(S.over)return;
-  if(Date.now()-actLock<350)return; // swallow accidental double-taps
+  if(Date.now()-actLock<350)return;
   const a=ACTIONS.find(x=>x.key===k);
   if(a.can&&!a.can())return;
   if(S.energy<a.en){toast('Not enough energy — rest, or end the month');return}
@@ -584,46 +647,64 @@ function fxAction(card,a){
     document.body.appendChild(f);setTimeout(()=>f.remove(),1400);
   });
 }
+function openBooksModal(){
+  const cur=S.books;
+  MQ.push({type:'html',html:`<h3>🗂️ The Back Office</h3>
+    <div class="body">What you can't see is already costing you. Current: <b>${BOOKS[cur].name}</b>.</div>
+    <div class="btns">${BOOKS.map((b,i)=>{
+      const cost=Math.round(b.cost*(S.trait==='numbers'?0.7:1));
+      if(i<cur)return '';
+      if(i===cur)return `<button class="btn ghost" disabled>${b.name} — current</button>`;
+      return `<button class="btn ${i===cur+1?'':'ghost'}" onclick="setBooks(${i})">${b.name} — ${cost?fmt(cost)+'/mo':'free'}<br><span style="font-size:11px;font-weight:400;opacity:.8">${b.desc}</span></button>`;
+    }).join('')}
+    <button class="btn ghost" onclick="closeModal()">Not now</button></div>`});
+  pump();
+}
+function setBooks(i){S.books=i;$('modalRoot').classList.remove('on');
+  toast('📊 '+BOOKS[i].name+' hired — your visibility just improved');
+  logLine('M'+(S.month+1),'Back office upgraded: '+BOOKS[i].name+'.');
+  render();save();pump();
+}
 function triggerBurnout(){
   S.burnouts++;S.forcedRest=true;
   S.rep=clamp(S.rep-5,0,100);
   queueInfo('🚨 Burnout','You hit the wall. Doctor\'s orders: next month you contribute <b>nothing</b> to the business. Whatever you built without you is all that\'s working.'+(S.burnouts>=2?'<br><br>This is burnout #'+S.burnouts+'. A third one ends the run.':''),
-    'You are the most important asset on the balance sheet — and the only one that can\'t be replaced. Capacity you build in others is the only sustainable kind.');
+    'You are the most important asset on the balance sheet — and the only one that can\'t be replaced.');
   pump();
   if(S.burnouts>=3){gameOver('burnout');}
 }
 
 /* ================= SIMULATION ================= */
-function quality(){
-  let q=50+S.teamSkill*0.3+S.systems*0.2+(S.energy>40?5:-10);
-  if(S.trait==='craft')q+=10;
-  if(S.trait==='hustler')q-=8;
-  return clamp(q,0,100);
-}
+function leakOn(line){return S.leaks.reduce((a,l)=>a+(l.line===line?l.drain:0),0)}
 function endMonth(){
   if(S.over)return;
   S.month++;
   const biz=bizOf(),loc=locOf();
-  // capacity
+  /* --- capacity: the delegation J-curve lives here --- */
   const ownerUnits=S.forcedRest?0:biz.ownerCap*(0.5+S.energy/200)*(S.grind?1.6:1);
-  const staffEff=(0.45+S.teamSkill/160)*(1+S.systems/180);
-  const staffUnits=S.staff.length*biz.staffCap*staffEff;
+  const staffUnits=S.staff.reduce((a,p)=>a+biz.staffCap*(0.25+p.skill/130)*(p.morale<35?0.7:1),0)*(1+S.systems/200);
   const cap=ownerUnits+staffUnits;
-  // demand
+  /* --- demand --- */
   let mkt=1;
   if(S.mktMonths>0){mkt=1+0.3*(S.trait==='hustler'?1.4:1);S.mktMonths--}
   const demand=(biz.baseDemand+S.rep*biz.repDemand)*loc.traffic*mkt*S.demandMult;
   const units=Math.min(demand,cap);
   const price=biz.price*S.priceMult*(loc.marginBonus||1);
-  const revenue=units*price;
-  // receivables collected
+  let revenue=units*price - leakOn('revenue');
+  revenue=Math.max(0,revenue);
+  S.lastRev=revenue||S.lastRev;
+  /* --- cash timing: split collection --- */
+  const collectNow=revenue*biz.splitNow;
+  const deferred=revenue-collectNow;
+  if(deferred>1)S.receivables.push({month:S.month+1,amount:deferred});
   let collected=0;
   S.receivables=S.receivables.filter(r=>{if(r.month<=S.month){collected+=r.amount;return false}return true});
-  const cogs=units*biz.cost;
-  const salaries=S.staff.reduce((a,p)=>a+p.salary,0);
+  /* --- costs --- */
+  const cogs=units*biz.cost + leakOn('cogs');
+  const payroll=payrollOf();
   const rent=loc.rent*S.rentMult;
-  const opex=(600+revenue*0.05)*(S.trait==='numbers'?0.85:1);
-  // debt service
+  const booksCost=Math.round(BOOKS[S.books].cost*(S.trait==='numbers'?0.7:1));
+  const opex=(700+revenue*0.05)*(S.trait==='numbers'?0.85:1) + leakOn('opex') + booksCost;
   let interest=0,debtOut=0;
   S.debts.forEach(d=>{
     const apr=d.apr*(S.trait==='numbers'?0.7:1);
@@ -633,135 +714,253 @@ function endMonth(){
     debtOut+=pay;
     d.balance=Math.max(0,d.balance+i-pay);
   });
-  S.debts=S.debts.filter(d=>d.balance>1||d.minPay===0&&d.balance>0);
-  const opNet=revenue+collected-cogs-salaries-rent-opex-debtOut;
-  S.cash+=opNet;
-  // taxes annually
+  S.debts=S.debts.filter(d=>d.balance>1||(d.minPay===0&&d.balance>0));
+  /* --- taxes (quarterly) --- */
+  const opNet=collectNow+collected-cogs-payroll-rent-opex-debtOut;
+  S.quarterProfit+=revenue-cogs-payroll-rent-opex-interest; // accrual basis
   let tax=0;
-  S.yearProfit+=opNet;
-  if(S.month%12===0){
-    if(S.yearProfit>0){tax=Math.round(S.yearProfit*0.21);S.cash-=tax;
-      queueInfo('🧾 Tax season','The year closed with '+fmt(S.yearProfit)+' in profit. The government would like its '+fmt(tax)+' now, please.',
-        'Profit isn\'t yours until taxes are set aside. Founders who treat the tax bill as a surprise get surprised out of business.');}
-    S.yearProfit=0;
+  if(S.month%3===0){
+    if(S.quarterProfit>0){
+      tax=Math.round(S.quarterProfit*0.21*(BOOKS[S.books].taxMult||1));
+      S.taxAccrued+=tax;
+    }
+    S.quarterProfit=0;
   }
-  // reputation
-  const q=quality();
-  let drep=(q-50)/14+loc.prestige*0.04;
-  if(units<demand*0.95)drep-=0.5;
-  if(drep>0&&S.trait==='craft')drep*=1.3;
+  let taxPaid=0;
+  if(S.taxAccrued>0&&S.cash+opNet>S.taxAccrued+2000){taxPaid=S.taxAccrued;S.taxAccrued=0}
+  else if(S.taxAccrued>0&&S.month%3===0){S.taxAccrued=Math.round(S.taxAccrued*1.08);
+    queueInfo('🧾 Taxes deferred','You couldn\'t cover the quarterly estimate. It rolls forward <b>with an 8% penalty</b>. The IRS is patient the way a casino is patient.',
+      'Set aside tax money the month you earn it. Deferred taxes are a loan you never signed at terms you\'d never accept.');}
+  S.cash+=opNet-taxPaid;
+  /* --- quality follows who does the work --- */
+  const ownerQ=62+(S.trait==='craft'?8:0)+(S.grind?5:0);
+  const staffQ=S.staff.length?30+avgSkill()*0.45+S.systems*0.15:0;
+  const ownerShare=cap>0?ownerUnits/cap:1;
+  let q=ownerShare*ownerQ+(1-ownerShare)*staffQ+(S.energy>40?2:-8);
+  if(S.trait==='hustler')q-=5;
+  /* --- reputation: earned daily, decays naturally --- */
+  let drep=(q-55)/12 - 0.8 + loc.prestige*0.04;
+  if(units<demand*0.95)drep-=0.4;
+  if(drep>0&&S.trait==='craft'&&ownerShare>0.5)drep*=1.3;
   S.rep=clamp(S.rep+drep,0,loc.repCap);
-  // dependence / freedom
-  const share=cap>0?ownerUnits/cap:1;
-  S.dep=clamp(Math.round(100*share*(1-S.systems/260)),3,100);
-  // streaks, energy, flags
-  S.profitStreak=opNet>0?S.profitStreak+1:0;
+  /* --- systems rot --- */
+  if(S.staff.length>0)S.systems=Math.max(0,S.systems-1);
+  /* --- people drift --- */
+  S.staff.forEach(p=>{
+    p.monthsIn++;p.skill=clamp(p.skill+3,0,100);
+    if(demand>cap*1.15)p.morale=clamp(p.morale-4,0,100);
+    if(p.monthsIn===12&&!p.loyal)p.morale=clamp(p.morale-8,0,100);
+  });
+  /* low morale attrition */
+  const unhappy=S.staff.find(p=>p.morale<30);
+  if(unhappy&&Math.random()<0.35){S.staff=S.staff.filter(p=>p!==unhappy);
+    queueInfo('🚪 '+unhappy.name+' resigned','No drama, just a two-line text on a Sunday night. Morale was '+Math.round(unhappy.morale)+' and nobody noticed.',
+      'People rarely announce they\'re burning out. The books show skill — only attention shows morale.');}
+  /* --- dependence --- */
+  S.dep=clamp(Math.round(100*ownerShare*(1-S.systems/260)),3,100);
+  S.profitStreak=(revenue-cogs-payroll-rent-opex-interest)>0?S.profitStreak+1:0;
   const wasVacation=S.forcedRest&&S.vacation;
-  S.energy=clamp(S.energy+(S.forcedRest?50:18),0,100);
-  S.grind=false;const hadRest=S.forcedRest;S.forcedRest=false;
+  S.energy=clamp(S.energy+(S.forcedRest?50:15),0,100);
+  S.grind=false;S.forcedRest=false;
   if(S.lineCooldown>0)S.lineCooldown--;
-  // employee quit risk from denied raise
-  if(S.quitRisk&&S.staff.length>0&&Math.random()<0.4){
-    const p=S.staff.shift();S.quitRisk=false;
-    queueInfo('🚪 '+p.name+' took another offer','You said no to the raise. Someone else said yes. Their knowledge walked out the door with them.',
-      'Replacing someone costs 3–6 months of salary in lost output and retraining. The raise was the cheap option.');
-  }
-  S.lastR={revenue,collected,cogs,salaries,rent,opex,interest,debtOut,opNet,tax,units,demand,cap,ownerUnits};
+  S.lastR={revenue,collectNow,deferred,collected,cogs,payroll,rent,opex,booksCost,interest,debtOut,tax,taxPaid,opNet,units,demand,cap,q};
   S.history.push(S.cash);S.revHist.push(revenue);
   if(S.history.length>80)S.history.shift();
-  // vacation test resolution
-  if(wasVacation){S.vacation=false;resolveVacation(opNet);render();save();return}
-  // events
-  const cashBeforeEv=S.cash;
+  if(wasVacation){S.vacation=false;resolveVacation(opNet-taxPaid);render();save();return}
+  /* --- payroll crisis --- */
+  if(S.cash<0&&payroll>0){payrollCrisis();render();save();return}
+  if(S.cash<-15000){gameOver('bankrupt');return}
+  /* --- spawn anomaly --- */
+  maybeSpawnLeak();
+  /* --- grow existing leaks --- */
+  S.leaks.forEach(l=>{l.monthsActive=(l.monthsActive||0)+1;l.drain=Math.round(l.drain*1.08);
+    if(defOf(l).breakAt&&l.monthsActive>=defOf(l).breakAt){killLeak(l);S.cash-=4500;
+      queueInfo('💥 It finally broke','The equipment you\'d been nursing died mid-rush. Emergency replacement: <b>−$4,500</b> — plus a day of lost business.',
+        'You saw this line trending up two closes ago. Maintenance deferred is a loan from your worst future self.');}});
+  /* --- monthly close --- */
+  queueClose();
   runEvents();
-  S.evDelta=S.cash-cashBeforeEv;
-  // interest trap lesson
-  const cc=S.debts.find(d=>d.apr>=0.2);
-  if(cc&&cc.paidI>10000&&!S.ach.ccLesson){S.ach.ccLesson=1;
-    queueInfo('💳 A grim milestone','You have now paid over <b>$10,000 in interest</b> on your credit cards — and the balance is barely smaller than the day you started.',
-      'Minimum payments are designed to keep you exactly where you are. High-interest debt isn\'t funding — it\'s a subscription to stress. Attack the principal or it never ends.');}
-  // bankruptcy pressure
-  if(S.cash<0){S.negMonths++;
-    if(!S.paydayOffered&&S.cash>-15000){S.paydayOffered=true;
-      queueChoice('🆘 The cash ran out','You\'re '+fmt(-S.cash)+' in the hole. A "merchant cash advance" outfit is offering <b>$25,000 today</b> at a brutal 36% APR. Or you tighten everything and try to trade through it.',[
-        {label:'Take the $25K advance (36% APR)',fn(){S.cash+=25000;S.debts.push({name:'Cash advance',balance:25000,apr:0.36,minPay:1400,paidI:0});
-          lessonModal('Desperate money is the most expensive money','When you borrow from a position of weakness, the lender prices your desperation. This buys you months — at a rate designed to take the whole business if you stumble again.')}},
-        {label:'Refuse. Cut to the bone.',fn(){S.demandMult*=0.95;S.energy=clamp(S.energy-15,0,100);
-          lessonModal('Survival mode','You delayed every bill and called every customer who owed you. It might work. Cash discipline before the crisis is what makes this moment unnecessary.')}},
-      ]);}
-    if(S.cash<-15000||S.negMonths>=3){gameOver('bankrupt');return}
-  } else S.negMonths=0;
-  // month report
-  queueReport();
-  if(S.month>=72&&!S.won){gameOver('time');return}
+  if(S.month>=84&&!S.won){gameOver('time');return}
   pump();render();save();
+}
+function defOf(l){return ANOMS.find(a=>a.id===l.defId)}
+function maybeSpawnLeak(){
+  if(S.leaks.length>=3)return;
+  if(Math.random()>0.4)return;
+  const candidates=ANOMS.filter(a=>!S.leaks.some(l=>l.defId===a.id)&&(!a.need||a.need(S)));
+  if(!candidates.length)return;
+  const def=rnd(candidates);
+  S.leaks.push({defId:def.id,line:def.line,drain:Math.round(def.drain(S)),monthsActive:0});
+}
+
+/* ================= MONTHLY CLOSE ================= */
+function queueClose(){
+  S.closeAtt=BOOKS[S.books].att;
+  /* CFO auto-handles first leak */
+  if(BOOKS[S.books].auto&&S.leaks.length){
+    const l=S.leaks[0];killLeak(l);
+    logLine('M'+S.month,'Your CFO quietly resolved: '+defOf(l).label+'.');
+  }
+  MQ.push({type:'close'});
+}
+function lineLabel(k){return {revenue:'Revenue',cogs:'Cost of goods',opex:'Operations'}[k]}
+function closeHTML(){
+  const r=S.lastR,b=bizOf();
+  const flag=line=>{
+    const ls=S.leaks.filter(l=>l.line===line);
+    if(!ls.length)return'';
+    return ls.map(l=>{
+      const i=S.leaks.indexOf(l);
+      const hint=BOOKS[S.books].hint?` title="${defOf(l).cause}"`:'';
+      return `<span class="flagBtn ${S.closeAtt<=0?'dim':''}" ${S.closeAtt>0?`onclick="investigate(${i})"`:''}${hint}>⚠ ${S.closeAtt>0?'investigate':'no attention left'}</span>`;
+    }).join('');
+  };
+  const row=(k,v,neg,fl)=>`<tr><td>${k}${fl||''}</td><td style="color:${neg?'var(--bad)':'inherit'}">${neg?'−':''}${fmt(Math.abs(v))}</td></tr>`;
+  const missed=r.demand>r.cap*1.05?`<div class="lesson" style="margin-top:14px">Demand was ${Math.round(r.demand)} ${b.unit} but you could only serve ${Math.round(r.cap)}. Customers you turn away buy from someone else tomorrow.</div>`:'';
+  const att=Array.from({length:BOOKS[S.books].att},(_,i)=>`<span class="attDot ${i<BOOKS[S.books].att-S.closeAtt?'used':''}"></span>`).join('');
+  const acc=(r.revenue-r.cogs-r.payroll-r.rent-r.opex-r.interest);
+  return `<h3>📒 Monthly Close — ${monthName()}</h3>
+    <div class="attChips">Attention: ${att} <span style="margin-left:6px">${BOOKS[S.books].name}</span></div>
+    <table class="pl">
+      ${row('Revenue earned ('+Math.round(r.units)+' '+b.unit+')',r.revenue,false,flag('revenue'))}
+      ${r.deferred>1?row('… of which still owed to you',-0,false)+`<tr><td style="padding-left:14px;font-size:12px">collects next month</td><td style="font-size:12px">${fmt(r.deferred)}</td></tr>`:''}
+      ${r.collected>1?row('Receivables collected',r.collected):''}
+      ${row('Cost of goods',-r.cogs,true,flag('cogs'))}
+      ${row('Payroll',-r.payroll,true)}
+      ${row('Rent',-r.rent,true)}
+      ${row('Operations'+(r.booksCost?' (incl. back office)':''),-r.opex,true,flag('opex'))}
+      ${row('Debt service (incl. '+fmt(r.interest)+' interest)',-r.debtOut,true)}
+      ${r.taxPaid?row('Taxes paid',-r.taxPaid,true):''}
+      <tr class="net"><td>Profit (accrual)</td><td style="color:${acc>=0?'var(--good)':'var(--bad)'}">${fmt(acc)}</td></tr>
+      <tr class="net"><td>Cash change</td><td style="color:${(r.opNet-r.taxPaid)>=0?'var(--good)':'var(--bad)'}">${fmt(r.opNet-r.taxPaid)}</td></tr>
+    </table>
+    ${Math.abs(acc-(r.opNet-r.taxPaid))>500?'<div style="font-size:11.5px;color:var(--dim);margin-top:8px">Profit ≠ cash this month — timing is everything.</div>':''}
+    ${missed}
+    <div class="btns"><button class="btn" onclick="closeContinue()">Review cash position →</button></div>`;
+}
+function investigate(i){
+  const l=S.leaks[i];
+  if(!l||S.closeAtt<=0)return;
+  S.closeAtt--;
+  window.__leakFix=l;
+  const d=defOf(l);
+  openModal(`<h3>🔍 ${d.label}</h3>
+    <div class="body">${d.cause}<br><br>Current bleed: <b style="color:var(--bad)">${fmt(l.drain)}/month</b> — and growing.</div>
+    <div class="btns">${d.fixes.map((f,j)=>`<button class="btn ${j>0?'ghost':''}" onclick="fixLeak(${j})">${f.label}</button>`).join('')}</div>`);
+}
+function fixLeak(j){
+  const l=window.__leakFix;
+  $('modalRoot').classList.remove('on');
+  defOf(l).fixes[j].fn(l);
+  render();save();
+  openModal(closeHTML());
+}
+function closeContinue(){
+  $('modalRoot').classList.remove('on');
+  const burn=S.lastR?Math.max(0,-(S.lastR.opNet-S.lastR.taxPaid)):0;
+  const runway=burn>50?Math.floor(S.cash/burn):null;
+  const recv=S.receivables.reduce((a,r)=>a+r.amount,0);
+  const hiddenNote=S.leaks.length&&!BOOKS[S.books].hint?'<div style="font-size:11.5px;color:var(--dim);margin-top:10px">Something in the numbers feels off, but you can\'t put your finger on it. Better books would help.</div>':'';
+  openModal(`<h3>💵 Cash Position</h3>
+    <table class="pl">
+      <tr><td>Cash on hand</td><td style="color:${S.cash<0?'var(--bad)':'inherit'}">${fmt(S.cash)}</td></tr>
+      ${recv>1?`<tr><td>Owed to you (receivables)</td><td>${fmt(recv)}</td></tr>`:''}
+      <tr><td>Next payroll</td><td>−${fmt(payrollOf())}</td></tr>
+      ${S.taxAccrued>0?`<tr><td>Tax bill accrued ⚠</td><td style="color:var(--bad)">−${fmt(S.taxAccrued)}</td></tr>`:''}
+      ${runway!==null?`<tr><td>Runway at current burn</td><td style="color:${runway<4?'var(--bad)':'inherit'}">${runway} months</td></tr>`:''}
+      ${S.staff.length?`<tr><td>Team avg skill / morale</td><td>${Math.round(avgSkill())} / ${Math.round(avgMorale())}${avgMorale()<45?' ⚠':''}</td></tr>`:''}
+    </table>${hiddenNote}
+    <div class="btns"><button class="btn" onclick="closeModal()">Next month →</button></div>`);
+}
+function payrollCrisis(){
+  MQ.push({type:'html',html:`<h3>🆘 You can't make payroll</h3>
+    <div class="body">Cash is at <b style="color:var(--bad)">${fmt(S.cash)}</b> and ${S.staff.length} people are expecting ${fmt(payrollOf())} on Friday. This is the moment owners never forget.</div>
+    <div class="btns">
+      <button class="btn" onclick="crisisChoice(0)">Cover it personally — +$15,000 on a 26% credit line</button>
+      <button class="btn ghost" onclick="crisisChoice(1)">Miss payroll and beg for patience</button>
+    </div>`});
+  pump();
+}
+function crisisChoice(i){
+  $('modalRoot').classList.remove('on');
+  if(i===0){S.cash+=15000;S.debts.push({name:'Personal credit line',balance:15000,apr:0.26,minPay:450,paidI:0});
+    lesson('The founder backstop','You just became your company\'s lender of last resort — at desperation rates. Cash forecasting exists so this moment never arrives.');}
+  else{S.missedPayroll++;
+    S.cash+=S.lastR?S.lastR.payroll:0; // wages never actually went out
+    const lost=Math.ceil(S.staff.length/2);
+    for(let k=0;k<lost;k++)S.staff.pop();
+    S.staff.forEach(p=>p.morale=clamp(p.morale-30,0,100));
+    S.rep=clamp(S.rep-8,0,100);
+    lesson('The Friday that breaks companies','Half your team walked. The rest are interviewing. Word travels through your industry faster than any press release. Missed payroll is rarely survived twice.');
+    if(S.missedPayroll>=2){pump();gameOver('payroll');return}}
+  queueClose();pump();render();save();
 }
 
 /* ================= EVENTS ================= */
-function fired(id,cool){if(S.evCool[id]&&S.month-S.evCool[id]<cool)return true;return false}
+function fired(id,cool){return S.evCool[id]&&S.month-S.evCool[id]<cool}
 function mark(id){S.evCool[id]=S.month}
 function runEvents(){
-  if(Math.random()>0.55)return;
+  if(Math.random()>0.5)return;
   const biz=bizOf();
   const pool=[];
   const add=(id,w,cool,fn,cond)=>{if(!fired(id,cool)&&(cond===undefined||cond))pool.push({id,w,fn})};
   add('viral',5,8,()=>{S.rep=clamp(S.rep+7,0,locOf().repCap);S.mktMonths=Math.max(S.mktMonths,2);
     queueInfo('📱 You went viral','A post about '+S.brand+' blew up overnight. New faces everywhere, for now.',
     'Virality spends reputation you already built. Luck favors brands that were already showing up.')},S.month>2);
-  add('quit',7,6,()=>{const p=S.staff.pop();
-    queueInfo('🚪 '+p.name+' quit','"I never really knew what I was doing here." Untrained people don\'t stay confused forever — they leave.',
-    'People don\'t quit jobs, they quit chaos. Training and systems aren\'t a cost center — they\'re retention.')},S.staff.length>0&&S.teamSkill<35&&S.month>4);
-  add('raise',6,9,()=>{const p=S.staff[0];
-    queueChoice('💼 '+p.name+' asks for a raise','Your best person wants 15% more. They\'ve earned it — and they know other shops are hiring.',[
-      {label:'Give the raise (+'+fmt(Math.round(p.salary*0.15))+'/mo)',fn(){p.salary=Math.round(p.salary*1.15);p.loyal=true;
+  add('raise',6,9,()=>{const p=[...S.staff].sort((a,b)=>a.morale-b.morale)[0];
+    queueChoice('💼 '+p.name+' asks for a raise','Your '+p.role+' wants 15% more. Skill '+Math.round(p.skill)+', morale '+Math.round(p.morale)+'. Other shops are hiring.',[
+      {label:'Give the raise (+'+fmt(Math.round(p.salary*0.15))+'/mo)',fn(){p.salary=Math.round(p.salary*1.15);p.loyal=true;p.morale=clamp(p.morale+20,0,100);
         lessonModal('Paying for loyalty','Keeping great people costs less than finding them. '+p.name+' just became someone who tells friends this is a great place to work.')}},
-      {label:'Say no — money\'s tight',fn(){S.quitRisk=true;
-        lessonModal('A quiet risk taken','Maybe they stay. But the door is now open, and recruiting them was the easy part. Watch this space.')}},
+      {label:'Say no — money\'s tight',fn(){p.morale=clamp(p.morale-22,0,100);
+        lessonModal('A quiet risk taken','Maybe they stay. But the door is open now, and their morale shows it. Watch this space.')}},
     ])},S.staff.length>0&&S.month>5);
+  add('poach',5,10,()=>{const p=[...S.staff].sort((a,b)=>b.skill-a.skill)[0];
+    queueChoice('🎯 '+p.name+' got an offer','Your best '+p.role+' (skill '+Math.round(p.skill)+') was offered '+fmt(Math.round(p.salary*1.25))+' across town.',[
+      {label:'Match it',fn(){p.salary=Math.round(p.salary*1.25);p.loyal=true;p.morale=clamp(p.morale+10,0,100);
+        lessonModal('The market sets wages, not you','A-players always have options. The premium you pay to keep one is smaller than the crater they leave.')}},
+      {label:'Wish them well',fn(){S.staff=S.staff.filter(x=>x!==p);
+        lessonModal('The crater','They took their skill, your training investment, and a few client relationships. Sometimes it\'s still the right call — but price it honestly.')}},
+    ])},S.staff.some(p=>p.skill>60)&&S.month>10);
   add('rent',5,12,()=>{S.rentMult*=1.12;
     queueInfo('📜 Rent increase','Your landlord "loves what you\'ve done with the place." Rent is up 12%.',
     'Fixed costs only move one direction on their own. Every dollar of rent must be re-earned every single month, forever.')},S.loc!=='home'&&S.month>8);
-  add('break',5,10,()=>{const hit=biz.key==='coffee'||biz.key==='fitness'?4000:1800;S.cash-=hit;
-    queueInfo('🔧 Equipment failure','Something critical died mid-rush. Emergency repair: '+fmt(hit)+'.',
-    'Stuff breaks on schedule — yours just isn\'t written down. Profitable businesses keep a maintenance reserve before they need it.')},S.month>3);
-  add('wholesale',5,10,()=>{const amt=Math.round(lastRevAvgFn()*1.6);
-    queueChoice('📦 A big wholesale order','A major buyer wants a bulk order worth <b>'+fmt(amt)+'</b> — at standard wholesale terms: 45% off, paid <b>net-60</b> (two months from now).',[
+  add('wholesale',5,10,()=>{const amt=Math.round((S.lastRev||10000)*1.6);
+    queueChoice('📦 A big wholesale order','A major buyer wants a bulk order worth <b>'+fmt(amt)+'</b> — at 45% off, paid <b>net-60</b>.',[
       {label:'Take it — big logo, big volume',fn(){const net=Math.round(amt*0.55);S.receivables.push({month:S.month+2,amount:net});
         S.energy=clamp(S.energy-15,0,100);
-        lessonModal('Revenue is not cash','You just did the work and paid for the materials — and the money arrives in 60 days. Growth eats cash before it feeds you. This is how profitable companies die.')}},
-      {label:'Pass — protect margin and cash',fn(){lessonModal('The discipline of "no"','Volume that breaks your cash cycle isn\'t growth, it\'s a loan you made to a bigger company. Knowing your numbers means knowing when to pass.')}},
+        lessonModal('Revenue is not cash','You just did the work and paid for the materials — and the money arrives in 60 days. Growth eats cash before it feeds you.')}},
+      {label:'Pass — protect margin and cash',fn(){lessonModal('The discipline of "no"','Volume that breaks your cash cycle isn\'t growth, it\'s a loan you made to a bigger company.')}},
     ])},S.month>6&&(biz.key==='fashion'||biz.key==='coffee'||biz.key==='creator'));
   add('press',4,10,()=>{
-    queueChoice('📰 A journalist is writing the story','A feature on local businesses is going to print. A PR consultant can guarantee you\'re the centerpiece — for $3,000.',[
+    queueChoice('📰 A journalist is writing the story','A feature is going to print. A PR consultant can guarantee you\'re the centerpiece — for $3,000.',[
       {label:'Pay the $3,000',fn(){S.cash-=3000;S.rep=clamp(S.rep+9,0,locOf().repCap);
         lessonModal('Buying attention','Reputation compounds. Sometimes the shortcut is worth it — as long as the product behind it holds.')}},
       {label:'Skip it',fn(){if(Math.random()<0.5){S.rep=clamp(S.rep+3,0,locOf().repCap);
-          lessonModal('Free press','They wrote about you anyway — a smaller mention, but free. Not every opportunity needs to be bought.')}
-        else lessonModal('The quiet path','The piece ran without you. Fine. Press is a multiplier, not a foundation.')}},
+          lessonModal('Free press','They wrote about you anyway — smaller mention, but free.')}
+        else lessonModal('The quiet path','The piece ran without you. Press is a multiplier, not a foundation.')}},
     ])},S.rep>30);
   add('copycat',4,12,()=>{S.demandMult*=0.88;
     queueInfo('👯 A copycat appeared','Someone opened a suspiciously familiar business across town. They\'re undercutting you on price.',
     'Competition copies your product, never your relationships or your systems. The moat was never the idea.')},S.month>10&&S.rep>35);
   add('fnf',9,99,()=>{S.fnfAsked=true;
-    queueChoice('👪 The family dinner','Your uncle finally asks, gently, about the $40,000. Nobody else at the table looks up from their plate.',[
+    queueChoice('👪 The family dinner','Your uncle finally asks, gently, about the $40,000. Nobody else looks up from their plate.',[
       {label:'Start repaying $1,000/mo',fn(){const d=S.debts.find(x=>x.name==='Family loan');if(d)d.minPay=1000;
         lessonModal('Clean money, clean conscience','Family money has zero interest and infinite emotional APR. A repayment plan converts an awkward dinner into a proud one.')}},
       {label:'"Soon, I promise"',fn(){S.rep=clamp(S.rep-4,0,100);S.energy=clamp(S.energy-10,0,100);
-        lessonModal('The invisible interest','The loan costs you nothing on paper and something every night. Unstructured obligations are still obligations.')}},
+        lessonModal('The invisible interest','The loan costs nothing on paper and something every night.')}},
     ])},S.fund==='fnf'&&!S.fnfAsked&&S.month>=15);
   add('investor',8,7,()=>{
-    queueChoice('😇 Investor check-in','Your angel reviews the numbers. "Growth is slower than we modeled. I want to see you put <b>$6,000</b> into acquisition this month."',[
+    queueChoice('😇 Investor check-in','Your angel reviews the numbers. "Growth is slower than we modeled. Put <b>$6,000</b> into acquisition this month."',[
       {label:'Spend the $6,000 on growth',fn(){S.cash-=6000;S.mktMonths=Math.max(S.mktMonths,3);
-        lessonModal('Other people\'s money has opinions','That check you cashed came with a voice in the room. Sometimes the push is right — but you no longer get to decide alone.')}},
+        lessonModal('Other people\'s money has opinions','The check you cashed came with a voice in the room.')}},
       {label:'Hold the line on your plan',fn(){S.investorTrust-=20;
-        lessonModal('Spending trust instead of cash','You kept the cash and paid in confidence. Investor trust is a real balance — it determines whether the next round, or the next favor, exists.')}},
+        lessonModal('Spending trust instead of cash','Investor trust is a real balance — it determines whether the next round, or the next favor, exists.')}},
     ])},S.fund==='angel'&&S.month-S.lastInvCheck>=8&&(S.lastInvCheck=S.month,true));
   if(!pool.length)return;
   const total=pool.reduce((a,e)=>a+e.w,0);
   let r=Math.random()*total;
   for(const e of pool){r-=e.w;if(r<=0){mark(e.id);e.fn();break}}
 }
-function lastRevAvgFn(){const h=S.revHist.slice(-3);return h.length?h.reduce((a,b)=>a+b,0)/h.length:5000}
 
 /* ================= MODALS ================= */
 function openModal(html){$('modalBox').innerHTML=html;$('modalRoot').classList.add('on')}
@@ -776,6 +975,8 @@ function pump(){
     window.__choices=m.choices;
     openModal(`<h3>${m.title}</h3><div class="body">${m.body}</div>
       <div class="btns">${m.choices.map((c,i)=>`<button class="btn ${i>0?'ghost':''}" onclick="pickChoice(${i})">${c.label}</button>`).join('')}</div>`);
+  }else if(m.type==='close'){
+    openModal(closeHTML());
   }else if(m.type==='html'){
     openModal(m.html);
   }
@@ -786,32 +987,13 @@ function pickChoice(i){
   c.fn();render();save();
   pump();
 }
-function queueInfo(title,body,lesson){if(lesson&&!S.lessons.includes(lesson))S.lessons.push(lesson);MQ.push({type:'info',title,body,lesson})}
+function queueInfo(title,body,lessonTxt){if(lessonTxt&&!S.lessons.includes(lessonTxt))S.lessons.push(lessonTxt);MQ.push({type:'info',title,body,lesson:lessonTxt})}
 function queueChoice(title,body,choices){MQ.push({type:'choice',title,body,choices})}
-function lessonModal(title,lesson){queueInfo(title,'',lesson)}
-function queueReport(){
-  const r=S.lastR;
-  const line=(k,v,neg)=>v?`<tr><td>${k}</td><td style="color:${neg?'var(--bad)':'inherit'}">${neg?'−':''}${fmt(Math.abs(v))}</td></tr>`:'';
-  const missed=r.demand>r.cap*1.05?`<div class="lesson" style="margin-top:14px">Demand was ${Math.round(r.demand)} ${bizOf().unit} but you could only serve ${Math.round(r.cap)}. Customers you turn away today buy from someone else tomorrow — capacity is a growth decision.</div>`:'';
-  MQ.push({type:'html',html:`<h3>Month ${S.month} — ${monthName()}</h3>
-    <table class="pl">
-      ${line('Revenue ('+Math.round(r.units)+' '+bizOf().unit+')',r.revenue)}
-      ${line('Wholesale payment received',r.collected)}
-      ${line('Cost of goods',-r.cogs,true)}
-      ${line('Salaries',-r.salaries,true)}
-      ${line('Rent',-r.rent,true)}
-      ${line('Operations',-r.opex,true)}
-      ${line('Debt payments (incl. '+fmt(r.interest)+' interest)',-r.debtOut,true)}
-      ${line('Taxes',-r.tax,true)}
-      ${S.evDelta?line('Events & decisions',S.evDelta,S.evDelta<0):''}
-      <tr class="net"><td>Net</td><td style="color:${r.opNet>=0?'var(--good)':'var(--bad)'}">${fmt(r.opNet)}</td></tr>
-    </table>${missed}
-    <div class="btns"><button class="btn" onclick="closeModal()">Next month →</button></div>`});
-}
+function lessonModal(title,lessonTxt){queueInfo(title,'',lessonTxt)}
 function monthName(){const m=['January','February','March','April','May','June','July','August','September','October','November','December'];return m[(S.month-1)%12]+', Year '+Math.ceil(S.month/12)}
 
 /* ================= WIN / LOSE ================= */
-function eligible(){return 100-S.dep>=65&&S.systems>=50&&S.profitStreak>=3}
+function eligible(){return 100-S.dep>=65&&S.systems>=60&&S.profitStreak>=4&&S.staff.length>=2&&avgSkill()>=55}
 function startVacation(){
   queueChoice('🌅 The 30-Day Test','You book the trip. Phone off, laptop home. For thirty days, '+S.brand+' is on its own — your team, your systems, your reputation. Whatever you actually built.<br><br>If it profits without you: <b>you\'ve escaped the rat race.</b>',[
     {label:'Turn off the phone. Go.',fn(){S.vacation=true;S.forcedRest=true;endMonth()}},
@@ -824,15 +1006,15 @@ function resolveVacation(net){
   else{
     queueInfo('📞 The business missed you','You came home to '+fmt(net)+' in losses and a team that kept calling. Close — but it still needs your hands.<br><br>More systems. More training. Try again.',
       'The 30-day test doesn\'t lie. If the business can\'t run a month without you, you don\'t own a business — you own a job with extra steps.');
-    queueReport();pump();
+    queueClose();pump();
   }
 }
 function winGame(net){
-  S.won=true;S.over=true;
-  const avgP=S.revHist.slice(-6).reduce((a,b)=>a+b,0)/6*0.25;
+  S.won=true;
+  const avgP=S.revHist.slice(-6).reduce((a,b)=>a+b,0)/6*0.22;
   const valuation=Math.max(0,Math.round(avgP*36));
   const yourShare=Math.round(valuation*S.equity)+Math.max(0,Math.round(S.cash));
-  const grade=S.month<=30?'S':S.month<=42?'A':S.month<=56?'B':'C';
+  const grade=S.month<=30?'S':S.month<=44?'A':S.month<=60?'B':'C';
   confetti();
   MQ.push({type:'html',html:`<h3>🗽 You escaped the rat race</h3>
     <div class="body">While you were on a beach, <b>${S.brand}</b> made <b style="color:var(--good)">${fmt(net)}</b> without you. The machine runs. You are no longer the engine — you're the owner.</div>
@@ -841,20 +1023,20 @@ function winGame(net){
       <div class="row"><span>Founder grade</span><b style="color:var(--ac)">${grade}</b></div>
       <div class="row"><span>Business valuation</span><b>${fmt(valuation)}</b></div>
       <div class="row"><span>Your stake (${Math.round(S.equity*100)}%) + cash</span><b style="color:var(--good)">${fmt(yourShare)}</b></div>
-      <div class="row"><span>Team built</span><b>${S.staff.length} people</b></div>
+      <div class="row"><span>Team built</span><b>${S.staff.length} people · skill ${Math.round(avgSkill())}</b></div>
       <div class="row"><span>Lessons collected</span><b>${S.lessons.length}</b></div>
     </div>
     ${lessonRecap()}
     <div class="btns"><button class="btn" onclick="restart()">Play Again — try a different path</button><button class="btn ghost" onclick="closeModal()">Keep playing this empire</button></div>`});
   pump();
-  S.over=false; // allow sandbox continue
 }
 function gameOver(kind){
   S.over=true;
   const msgs={
-    bankrupt:['💀 Bankruptcy','The money ran out and stayed out. The landlord changed the locks. '+S.brand+' is a story now, not a business.','Cash is oxygen. Profitable companies suffocate all the time — they just confuse the P&L for the bank account.'],
-    burnout:['🥀 Total Burnout','Third collapse. Your body made the decision your calendar refused to. '+S.brand+' can\'t run without you — and now neither can you.','A business built entirely on your own back has a load limit: yours. Freedom was always the metric that mattered.'],
-    time:['⏳ Six Years Later','Seventy-two months in, '+S.brand+' is still standing — and still strapped to your back. Not a failure. Not freedom either.','The rat race doesn\'t end with time served. It ends with systems, people, and the courage to step away.'],
+    bankrupt:['💀 Bankruptcy','The money ran out and stayed out. The landlord changed the locks. '+S.brand+' is a story now, not a business.','Cash is oxygen. Profitable companies suffocate all the time — they confuse the P&L for the bank account.'],
+    payroll:['🪦 The second missed payroll','There was no team left to miss it. '+S.brand+' died not from a bad product but from a cash flow nobody was watching.','Payroll is sacred. Forecast cash thirteen weeks out, always — the crisis you see coming is the one you survive.'],
+    burnout:['🥀 Total Burnout','Third collapse. Your body made the decision your calendar refused to. '+S.brand+' can\'t run without you — and now neither can you.','A business built entirely on your own back has a load limit: yours.'],
+    time:['⏳ Seven Years Later','Eighty-four months in, '+S.brand+' is still standing — and still strapped to your back. Not a failure. Not freedom either.','The rat race doesn\'t end with time served. It ends with systems, people, and the courage to step away.'],
   };
   const m=msgs[kind];
   MQ.push({type:'html',html:`<h3>${m[0]}</h3><div class="body">${m[1]}</div><div class="lesson">${m[2]}</div>
@@ -867,14 +1049,14 @@ function gameOver(kind){
     ${lessonRecap()}
     <div class="btns"><button class="btn" onclick="restart()">Run It Back</button></div>`});
   pump();render();
-  localStorage.removeItem('fm_save');
+  localStorage.removeItem('fm_save2');
 }
 function lessonRecap(){
   if(!S.lessons.length)return'';
   return `<div style="margin-top:18px"><div style="font-size:10px;letter-spacing:.25em;color:var(--ac);margin-bottom:10px">💡 WHAT THIS RUN TAUGHT YOU</div>
     ${S.lessons.slice(0,8).map(l=>`<div style="font-size:12.5px;color:var(--dim);padding:7px 0;border-bottom:1px dashed var(--line);line-height:1.5">${l}</div>`).join('')}</div>`;
 }
-function restart(){localStorage.removeItem('fm_save');location.reload()}
+function restart(){localStorage.removeItem('fm_save2');location.reload()}
 
 /* ================= RENDER ================= */
 let dispCash=null;
@@ -884,34 +1066,32 @@ function render(){
   document.querySelector('#brandTitle .em').textContent=biz.emoji;
   document.querySelector('#brandTitle .nm').textContent=S.brand;
   $('monthChip').textContent=S.month===0?'Opening Month':'Month '+S.month+' · Yr '+Math.ceil(Math.max(1,S.month)/12);
-  // level
   const avg=S.revHist.slice(-3);const a3=avg.length?avg.reduce((x,y)=>x+y,0)/avg.length:0;
   let lvl=LEVELS[0][1];for(const[th,n]of LEVELS)if(a3>=th)lvl=n;
   $('levelChip').textContent=lvl;
-  // energy chip: always visible in the sticky bar, bumps on change, red when low
   const ec=$('energyChip'),eNow=Math.round(S.energy);
   if(ec.dataset.v&&ec.dataset.v!==''+eNow){ec.classList.remove('bump');void ec.offsetWidth;ec.classList.add('bump')}
   ec.dataset.v=''+eNow;ec.textContent='⚡ '+eNow;ec.classList.toggle('low',eNow<25);
-  // cash ticker
   animCash();
-  // you panel
   document.querySelector('#youHead .av2').textContent=S.avatar;
   document.querySelector('#youHead .nm').textContent=S.name;
   document.querySelector('#youHead .tr').textContent=tr.emoji+' '+tr.name;
   setBar('Energy',S.energy);setBar('Free',100-S.dep);
-  setBar('Rep',Math.round(S.rep));setBar('Skill',S.teamSkill);setBar('Sys',S.systems);
+  setBar('Rep',Math.round(S.rep));setBar('Sys',S.systems);
   $('depNote').textContent=S.dep>70?'The business is basically you in a trench coat. Build team + systems.':S.dep>40?'Getting there — the machine does some of the work now.':'The machine mostly runs itself. This is what ownership feels like.';
-  // team
-  $('teamList').innerHTML=S.staff.length?S.staff.map(p=>`<div class="teamline"><span><b>${p.name}</b> · ${p.role}${p.loyal?' 💛':''}</span><span>${fmt(p.salary)}/mo</span></div>`).join(''):'<div style="font-size:12px;color:var(--dim)">No team yet. It\'s all you.</div>';
-  // debts
+  const mEmoji=m=>m>=65?'😊':m>=45?'😐':'😟';
+  $('teamList').innerHTML=S.staff.length?S.staff.map(p=>`<div class="teamline"><b>${p.name}</b><span class="skillmini"><i style="width:${p.skill}%"></i></span><span>${mEmoji(p.morale)}</span><span>${fmt(p.salary)}</span></div>`).join('')+
+    `<div style="font-size:10.5px;color:var(--dim);margin-top:6px">skill bars · morale faces · salaries</div>`
+    :'<div style="font-size:12px;color:var(--dim)">No team yet. It\'s all you.</div>';
   $('debtList').innerHTML=S.debts.map(d=>`<div class="debtline"><span>${d.name} · ${Math.round(d.apr*100)}%</span><b>${fmt(d.balance)}</b></div>`).join('');
-  // checklist
   const free=100-S.dep;
-  const cks=[['Freedom ≥ 65',free>=65,free+'/65'],['Systems ≥ 50',S.systems>=50,S.systems+'/50'],['3 profitable months in a row',S.profitStreak>=3,Math.min(S.profitStreak,3)+'/3'],['Pass The 30-Day Test',S.won,S.won?'DONE':'—']];
+  const cks=[['Freedom ≥ 65',free>=65,free+'/65'],['Systems ≥ 60',S.systems>=60,S.systems+'/60'],
+    ['Team of 2+, avg skill ≥ 55',S.staff.length>=2&&avgSkill()>=55,S.staff.length<2?S.staff.length+' staff':Math.round(avgSkill())+'/55'],
+    ['4 profitable months in a row',S.profitStreak>=4,Math.min(S.profitStreak,4)+'/4'],
+    ['Pass The 30-Day Test',S.won,S.won?'DONE':'—']];
   $('checks').innerHTML=cks.map(c=>`<div class="ck ${c[1]?'done':''}"><span class="box">${c[1]?'✓':''}</span><span>${c[0]}</span><span style="margin-left:auto;font-variant-numeric:tabular-nums">${c[2]}</span></div>`).join('');
-  // actions
-  $('energyHint').innerHTML='⚡ <b>'+S.energy+'</b> energy to spend this month. Actions now, then END MONTH to see what happens.';
-  $('staffChip').textContent=S.staff.length+' staff · '+fmt(S.staff.reduce((a,p)=>a+p.salary,0))+'/mo payroll';
+  $('energyHint').innerHTML='⚡ <b>'+Math.round(S.energy)+'</b> energy this month. Actions now, then END MONTH to close the books.';
+  $('staffChip').textContent=S.staff.length+' staff · '+fmt(payrollOf())+'/mo payroll';
   let html=ACTIONS.map(a=>{
     const ok=(!a.can||a.can())&&S.energy>=a.en&&S.cash>=a.cash&&!S.over;
     return `<button class="act ${ok?'':'off'}" onclick="tryAction('${a.key}',event)">
@@ -923,16 +1103,23 @@ function render(){
     <div class="cost"><span style="color:var(--ac)">The final exam</span></div></button>`;
   $('actionsGrid').innerHTML=html;
   $('endBtn').disabled=!!S.over&&!S.won;
-  // P&L side
+  /* cash position panel */
+  const recv=S.receivables.reduce((a,r)=>a+r.amount,0);
+  const burn=S.lastR?Math.max(0,-(S.lastR.opNet-S.lastR.taxPaid)):0;
+  const showForecast=S.books>=1;
+  $('cashLines').innerHTML=
+    `<div class="cashline"><span>Owed to you</span><b>${fmt(recv)}</b></div>
+     <div class="cashline"><span>Next payroll</span><b style="color:${payrollOf()>S.cash?'var(--bad)':'var(--txt)'}">−${fmt(payrollOf())}</b></div>
+     <div class="cashline"><span>Tax accrued</span><b style="color:${S.taxAccrued>0?'var(--bad)':'var(--txt)'}">−${fmt(S.taxAccrued)}</b></div>`+
+    (showForecast?`<div class="cashline"><span>Runway</span><b>${burn>50?Math.floor(S.cash/burn)+' months':'cash-positive'}</b></div>`
+      :`<div class="cashline"><span>Forecast</span><b style="color:var(--dim);font-weight:400">needs a bookkeeper</b></div>`);
   if(S.lastR){const r=S.lastR;
     const row=(k,v,neg)=>v?`<tr><td>${k}</td><td style="color:${neg?'var(--bad)':'inherit'}">${neg?'−':''}${fmt(Math.abs(v))}</td></tr>`:'';
-    $('plTable').innerHTML=row('Revenue',r.revenue)+row('COGS',-r.cogs,1)+row('Salaries',-r.salaries,1)+row('Rent',-r.rent,1)+row('Ops',-r.opex,1)+row('Debt svc',-r.debtOut,1)+row('Tax',-r.tax,1)+
-      `<tr class="net"><td>Net</td><td style="color:${r.opNet>=0?'var(--good)':'var(--bad)'}">${fmt(r.opNet)}</td></tr>`;
+    $('plTable').innerHTML=row('Revenue',r.revenue)+row('COGS',-r.cogs,1)+row('Payroll',-r.payroll,1)+row('Rent',-r.rent,1)+row('Ops',-r.opex,1)+row('Debt svc',-r.debtOut,1)+row('Tax',-r.taxPaid,1)+
+      `<tr class="net"><td>Cash change</td><td style="color:${(r.opNet-r.taxPaid)>=0?'var(--good)':'var(--bad)'}">${fmt(r.opNet-r.taxPaid)}</td></tr>`;
   }
   drawSpark();
-  // log
   $('logLines').innerHTML=S.log.slice(0,30).map(l=>`<div class="logline"><b>${l[0]}</b> — ${l[1]}</div>`).join('');
-  // achievements
   checkAch();
 }
 function setBar(k,v){$('v'+k).textContent=Math.round(v)+(k==='Free'?'%':'');$('b'+k).style.width=clamp(v,0,100)+'%'}
@@ -957,7 +1144,6 @@ function drawSpark(){
   const min=Math.min(...d,0),max=Math.max(...d,1);
   const px=i=>i/(d.length-1)*(w-4)+2;
   const py=v=>h-4-(v-min)/(max-min||1)*(h-10);
-  // zero line
   if(min<0){x.strokeStyle='rgba(255,255,255,.12)';x.setLineDash([3,3]);x.beginPath();x.moveTo(0,py(0));x.lineTo(w,py(0));x.stroke();x.setLineDash([])}
   x.beginPath();d.forEach((v,i)=>i?x.lineTo(px(i),py(v)):x.moveTo(px(i),py(v)));
   const ac=getComputedStyle(document.documentElement).getPropertyValue('--ac').trim();
@@ -978,7 +1164,9 @@ function checkAch(){
   if(S.cash>=100000)give('c100','$100K in the Bank');
   if(S.rep>=75)give('rep75','Reputation 75 — people talk about you');
   if(100-S.dep>=50)give('free50','Freedom 50 — half the business runs itself');
-  if(S.systems>=50)give('sys50','Systems 50 — it\'s written down');
+  if(S.systems>=60)give('sys60','Systems 60 — it\'s written down');
+  if(S.books>=2)give('cfoTrack','You can finally read your own business');
+  if(avgSkill()>=70&&S.staff.length>=3)give('aTeam','A-Team — they might be better than you');
 }
 function confetti(){
   const ems=['🎉','✨','💸','🥂','🗽','💛'];
@@ -992,15 +1180,15 @@ function confetti(){
 }
 
 /* ================= SAVE ================= */
-function save(){try{localStorage.setItem('fm_save',JSON.stringify(S))}catch(e){}}
+function save(){try{localStorage.setItem('fm_save2',JSON.stringify(S))}catch(e){}}
 function continueGame(){
-  try{S=JSON.parse(localStorage.getItem('fm_save'));
+  try{S=JSON.parse(localStorage.getItem('fm_save2'));
     document.documentElement.style.setProperty('--ac',bizOf().accent);
     show('sc-game');render();
   }catch(e){toast('Save corrupted — starting fresh');newGame()}
 }
 (function init(){
-  if(localStorage.getItem('fm_save'))$('contBtn').style.display='inline-block';
+  if(localStorage.getItem('fm_save2'))$('contBtn').style.display='inline-block';
 })();
 /* PWA: offline cache (registers only on https, e.g. the hosted version) */
 if('serviceWorker' in navigator&&location.protocol==='https:'){
