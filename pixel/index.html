@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#0b0b10">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>FOUNDER MODE — Pixel</title>
+<style>
+:root{--ac:#d4af37;--bg:#0b0b10;--card:#15151d;--line:rgba(255,255,255,.09);--txt:#eceae4;--dim:#9a97a3}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+  display:flex;flex-direction:column;align-items:center;overflow:hidden;
+  padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+#hud{display:flex;gap:6px;align-items:center;padding:8px 10px;width:100%;max-width:680px;flex-wrap:wrap}
+.chip{font-size:11px;letter-spacing:.06em;padding:4px 11px;border-radius:999px;background:var(--card);border:1px solid var(--line);color:var(--dim);white-space:nowrap}
+.chip b{color:var(--txt)}
+.chip.gold{color:var(--ac);border-color:color-mix(in srgb,var(--ac) 45%,transparent)}
+.chip.energy{color:#4ade80;border-color:rgba(74,222,128,.4)}
+.chip.energy.low{color:#f87171;border-color:rgba(248,113,113,.5)}
+#cashChip{margin-left:auto;font-weight:800;font-size:13px;color:var(--txt)}
+#stage{position:relative;width:100%;max-width:680px;line-height:0}
+canvas{width:100%;image-rendering:pixelated;border-radius:10px;border:1px solid var(--line)}
+#dlg{position:absolute;left:3%;right:3%;bottom:4%;background:rgba(8,8,14,.95);border:2px solid #f5efe0;
+  border-radius:12px;padding:12px 14px;line-height:1.45;display:none;box-shadow:0 0 0 3px rgba(8,8,14,.95),0 10px 30px rgba(0,0,0,.6)}
+#dlg.on{display:block}
+#dlgTitle{color:var(--ac);font-size:13px;font-weight:700;margin-bottom:6px}
+#dlgText{font-size:13.5px;color:var(--txt);white-space:pre-wrap;min-height:20px}
+#dlgBtns{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+#dlgBtns button{background:#1c1c26;border:1px solid var(--line);color:var(--txt);border-radius:9px;
+  padding:10px 12px;font-size:13.5px;text-align:left;cursor:pointer;touch-action:manipulation}
+#dlgBtns button:active{background:#2a2a38;border-color:var(--ac)}
+#dlgNext{color:var(--ac);text-align:right;font-size:12px;margin-top:6px;animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.2}}
+#controls{display:flex;justify-content:space-between;align-items:center;width:100%;max-width:680px;
+  padding:14px 18px calc(14px + env(safe-area-inset-bottom));touch-action:none;user-select:none;-webkit-user-select:none}
+#dpad{display:grid;grid-template-columns:repeat(3,52px);grid-template-rows:repeat(3,52px);gap:2px}
+.dbtn{background:var(--card);border:1px solid var(--line);border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-size:20px;color:var(--dim);touch-action:none}
+.dbtn:active,.dbtn.held{background:#2a2a38;color:var(--ac);border-color:var(--ac)}
+#abtn{width:74px;height:74px;border-radius:50%;background:linear-gradient(135deg,var(--ac),#a8841c);color:#111;
+  font-weight:800;font-size:18px;border:none;display:flex;align-items:center;justify-content:center;touch-action:none;
+  box-shadow:0 6px 20px rgba(212,175,55,.3)}
+#abtn:active{transform:scale(.93)}
+#loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--dim);font-size:13px}
+@media(min-height:800px){ #dpad{grid-template-columns:repeat(3,58px);grid-template-rows:repeat(3,58px)} }
+</style>
+</head>
+<body>
+<div id="hud">
+  <div class="chip gold" id="brandChip">MAISON NOIR</div>
+  <div class="chip" id="monthChip">M0</div>
+  <div class="chip energy" id="enChip">⚡ 100</div>
+  <div class="chip" id="freeChip">🗽 10%</div>
+  <div class="chip" id="cashChip">$61,400</div>
+</div>
+<div id="stage">
+  <canvas id="g" width="720" height="576"></canvas>
+  <div id="loading">stitching the atelier…</div>
+  <div id="dlg">
+    <div id="dlgTitle"></div>
+    <div id="dlgText"></div>
+    <div id="dlgBtns"></div>
+    <div id="dlgNext">▼ tap</div>
+  </div>
+</div>
+<div id="controls">
+  <div id="dpad">
+    <div></div><div class="dbtn" data-d="up">▲</div><div></div>
+    <div class="dbtn" data-d="left">◀</div><div></div><div class="dbtn" data-d="right">▶</div>
+    <div></div><div class="dbtn" data-d="down">▼</div><div></div>
+  </div>
+  <button id="abtn">A</button>
+</div>
+
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const fmt=n=>{const s=n<0?'-':'';return s+'$'+Math.abs(Math.round(n)).toLocaleString()};
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+const TS=16,SC=3,T=TS*SC,MW=15,MH=12;
+const cv=$('g'),ctx=cv.getContext('2d');
+ctx.imageSmoothingEnabled=false;
+
+/* ============ SIM (identical model to desktop pixel ed.) ============ */
+const SIM={month:0,cash:61400,energy:100,rep:26,teamSkill:0,systems:0,staffN:0,
+  priceMult:1,demandMult:1,mktMonths:0,grind:false,dep:90,profitStreak:0,
+  debt:{name:'SBA loan',balance:75000,apr:0.09,minPay:1560},lastNet:0,won:false,over:false,
+  price:2600*1.22,cost:800,ownerCap:5,staffCap:4,baseDemand:2,repDemand:0.22,
+  rent:2800,salary:4200,traffic:0.95,repCap:100,lineCooldown:0};
+function eligible(){return 100-SIM.dep>=65&&SIM.systems>=50&&SIM.profitStreak>=3}
+function simMonth(vac){
+  SIM.month++;
+  const ownerU=vac?0:SIM.ownerCap*(0.5+SIM.energy/200)*(SIM.grind?1.6:1);
+  const staffU=SIM.staffN*SIM.staffCap*(0.45+SIM.teamSkill/160)*(1+SIM.systems/180);
+  const cap=ownerU+staffU;
+  let mkt=1;if(SIM.mktMonths>0){mkt=1.3;SIM.mktMonths--}
+  const demand=(SIM.baseDemand+SIM.rep*SIM.repDemand)*SIM.traffic*mkt*SIM.demandMult;
+  const units=Math.min(demand,cap);
+  const revenue=units*SIM.price*SIM.priceMult, cogs=units*SIM.cost, sal=SIM.staffN*SIM.salary, opex=600+revenue*0.05;
+  let debtOut=0;
+  if(SIM.debt&&SIM.debt.balance>1){const i=SIM.debt.balance*SIM.debt.apr/12;
+    debtOut=Math.min(SIM.debt.balance+i,SIM.debt.minPay);SIM.debt.balance=Math.max(0,SIM.debt.balance+i-debtOut)}
+  const net=revenue-cogs-sal-SIM.rent-opex-debtOut;
+  SIM.cash+=net;SIM.lastNet=net;
+  const q=50+SIM.teamSkill*0.3+SIM.systems*0.2+(SIM.energy>40?5:-10)+10;
+  let drep=(q-50)/14+0.56;if(units<demand*0.95)drep-=0.5;
+  SIM.rep=clamp(SIM.rep+drep,0,SIM.repCap);
+  SIM.dep=clamp(Math.round(100*(cap>0?ownerU/cap:1)*(1-SIM.systems/260)),3,100);
+  SIM.profitStreak=net>0?SIM.profitStreak+1:0;
+  SIM.energy=clamp(SIM.energy+(vac?50:18),0,100);SIM.grind=false;
+  if(SIM.lineCooldown>0)SIM.lineCooldown--;
+  return {revenue,net,units,demand,cap,costs:cogs+sal+SIM.rent+opex+debtOut};
+}
+
+/* ============ ASSETS ============ */
+const IMGS={};
+const LOAD=[
+ ['cloth','assets/21_Clothing_Store.png'],['gen','assets/1_Generic_16x16.png'],
+ ['floor','assets/Room_Builder_Floors_16x16.png'],['wall','assets/Room_Builder_Walls_16x16.png'],
+ ['adam_i','assets/Adam_idle_16x16.png'],['adam_r','assets/Adam_run_16x16.png'],
+ ['alex_i','assets/Alex_idle_16x16.png'],['alex_r','assets/Alex_run_16x16.png'],
+ ['amelia_i','assets/Amelia_idle_16x16.png'],['amelia_r','assets/Amelia_run_16x16.png'],
+ ['bob_i','assets/Bob_idle_16x16.png'],['bob_r','assets/Bob_run_16x16.png'],
+ ['molly_i','assets/Molly_idle_16x16.png'],['molly_r','assets/Molly_run_16x16.png'],
+];
+let loaded=0;
+LOAD.forEach(([k,src])=>{const im=new Image();im.onload=()=>{IMGS[k]=im;if(++loaded===LOAD.length)boot()};
+  im.onerror=()=>{$('loading').textContent='asset failed: '+src};im.src=src});
+
+/* ============ WORLD ============ */
+// objects: sheet tile coords (sx,sy,w,h) -> map tile (x,y). wall:true = drawn on wall band. under:true = walkable, drawn beneath.
+const OBJS=[
+ {s:'cloth',sx:5, sy:18,w:2,h:2,x:3, y:0, wall:1, hs:'mirror'},   // big gilt mirror
+ {s:'cloth',sx:11,sy:24,w:3,h:2,x:9, y:0, wall:1, hs:'posters'},  // campaign posters = marketing
+ {s:'cloth',sx:14,sy:16,w:2,h:2,x:13,y:0, wall:1, hs:'archive'},  // pattern archive = systems
+ {s:'gen',  sx:8, sy:4, w:3,h:2,x:6, y:6, under:1},               // patterned rug
+ {s:'cloth',sx:0, sy:32,w:2,h:2,x:2, y:3, hs:'desk'},             // register desk
+ {s:'cloth',sx:3, sy:29,w:2,h:2,x:8, y:3, hs:'table'},            // cutting/display table
+ {s:'cloth',sx:9, sy:14,w:2,h:2,x:12,y:2, hs:'rack'},             // garment rack (white)
+ {s:'cloth',sx:9, sy:18,w:2,h:2,x:12,y:5, hs:'rack'},             // garment rack (green)
+ {s:'cloth',sx:9, sy:20,w:2,h:2,x:0, y:5, hs:'rack'},             // garment rack (pink)
+ {s:'cloth',sx:0, sy:10,w:1,h:2,x:5, y:2, hs:'mannequin'},        // dress form
+ {s:'cloth',sx:1, sy:10,w:1,h:2,x:6, y:2, hs:'mannequin'},        // dress form 2
+ {s:'cloth',sx:9, sy:29,w:1,h:2,x:10,y:2, hs:'mirror'},           // standing oval mirror
+ {s:'gen',  sx:6, sy:11,w:2,h:2,x:1, y:8, hs:'sofa'},             // velvet sofa
+ {s:'cloth',sx:14,sy:32,w:1,h:2,x:13,y:8},                        // gold armchair
+ {s:'cloth',sx:11,sy:27,w:1,h:1,x:0, y:2},                        // yarn basket
+ {s:'cloth',sx:13,sy:27,w:1,h:1,x:14,y:8},                        // yarn basket
+];
+const DOOR={x:7,y:11};
+const solidGrid=(()=>{
+  const g=Array.from({length:MH},()=>Array(MW).fill(false));
+  for(let x=0;x<MW;x++){g[0][x]=g[1][x]=g[11][x]=true}
+  OBJS.forEach(o=>{if(o.wall||o.under)return;
+    for(let j=0;j<o.h;j++)for(let i=0;i<o.w;i++){const yy=o.y+j,xx=o.x+i;if(yy<MH&&xx<MW)g[yy][xx]=true}});
+  return g;
+})();
+const solid=(x,y)=>x<0||y<0||x>=MW||y>=MH?true:solidGrid[y][x];
+function hotspotAt(x,y){
+  for(const o of OBJS){if(!o.hs)continue;
+    if(x>=o.x&&x<o.x+o.w&&y>=o.y&&y<o.y+o.h)return o.hs}
+  if(x===DOOR.x&&y>=10)return 'door';
+  return null;
+}
+
+/* ============ CHARACTERS ============ */
+const DIRI={right:0,up:1,left:2,down:3};
+function makeChar(key,x,y,dir){return {key,x,y,px:x*T,py:y*T,dir:dir||'down',frame:0,ft:0,moving:false}}
+const player=makeChar('adam',7,7,'up');
+let staffNPCs=[],customers=[],custTimer=3;
+const STAFF_SPOTS=[[8,5],[9,5],[7,5]];
+const RACK_SPOTS=[[12,4],[12,7],[1,7],[5,4]];
+function drawChar(c){
+  const run=c.moving;
+  const sheet=IMGS[c.key+(run?'_r':'_i')];
+  const di=DIRI[c.dir];
+  const fx=run?(di*6+(Math.floor(c.ft)%6))*16:di*16;
+  ctx.drawImage(sheet,fx,0,16,32,Math.round(c.px),Math.round(c.py)-T,T,T*2);
+}
+
+/* ============ DIALOGUE (HTML) ============ */
+let DLG=null,typeTimer=null;
+function showBox(title,text,btns,after){
+  DLG={after,btns,fullText:text,hasBtns:!!btns,built:false};
+  $('dlgTitle').textContent=title||'';$('dlgTitle').style.display=title?'block':'none';
+  const tx=$('dlgText');tx.textContent='';
+  $('dlgBtns').innerHTML='';$('dlgNext').style.display=btns?'none':'block';
+  $('dlg').classList.add('on');
+  let i=0;clearInterval(typeTimer);
+  typeTimer=setInterval(()=>{i+=2;tx.textContent=text.slice(0,i);
+    if(i>=text.length)finishType()},12);
+}
+function finishType(){
+  if(typeTimer){clearInterval(typeTimer);typeTimer=null}
+  if(!DLG)return;
+  $('dlgText').textContent=DLG.fullText;
+  if(DLG.btns&&!DLG.built){DLG.built=true;
+    DLG.btns.forEach(b=>{const e=document.createElement('button');e.textContent=b.label;
+      e.onclick=()=>{closeBox();if(b.fn)b.fn()};$('dlgBtns').appendChild(e)})}
+}
+function closeBox(){$('dlg').classList.remove('on');const a=DLG&&DLG.after;DLG=null;if(a)a()}
+function tapDialogue(){
+  if(!DLG)return;
+  if(typeTimer){finishType();return}
+  if(!DLG.hasBtns)closeBox();
+}
+function say(text,after){showBox('',text,null,after)}
+function sayT(title,text,after){showBox(title,text,null,after)}
+function menu(title,text,opts){showBox(title,text,opts,null)}
+
+/* ============ INTERACTIONS ============ */
+const ACT={
+  desk(){menu('The front desk','Ledger, register, and a vase of peonies.',[
+    {label:'🤝 Hire a tailor (-$1,200, ⚡15)',fn(){
+      if(SIM.energy<15)return say('Too exhausted to run interviews. Rest on the sofa first.');
+      if(SIM.cash<1200)return say('You can\'t afford the recruiter right now.');
+      SIM.energy-=15;SIM.cash-=1200;SIM.staffN++;
+      if(staffNPCs.length<3){const[sx,sy]=STAFF_SPOTS[staffNPCs.length];
+        staffNPCs.push(makeChar(rnd(['alex','amelia','bob','molly']),sx,sy,'up'))}
+      say('A new tailor joins the atelier! They start green — training turns salary into capacity.');hud()}},
+    {label:'🏷️ Raise prices (+8%, ⚡5)',fn(){
+      if(SIM.energy<5)return say('Not enough energy.');
+      SIM.energy-=5;SIM.priceMult*=1.08;SIM.demandMult*=(SIM.rep>=40?0.96:0.90);
+      say(SIM.rep>=40?'Prices up 8%. Your reputation carried it.':'Prices up 8%. A few clients grumbled off — your name isn\'t big enough yet to charge like this.');hud()}},
+    {label:'💸 Pay down debt (-$5,000)',fn(){
+      if(!SIM.debt||SIM.debt.balance<=1)return say('You are debt free. It feels as good as they say.');
+      if(SIM.cash<5500)return say('Not enough cash to spare.');
+      const p=Math.min(5000,SIM.debt.balance);SIM.cash-=p;SIM.debt.balance-=p;
+      say('Paid '+fmt(p)+' toward the SBA loan. '+fmt(SIM.debt.balance)+' to go.');hud()}},
+    {label:'📒 Check the books',fn(){
+      say('MONTH '+SIM.month+'  ·  '+fmt(SIM.cash)+'\nEnergy '+Math.round(SIM.energy)+' · Rep '+Math.round(SIM.rep)+' · Freedom '+(100-SIM.dep)+'%\nSystems '+SIM.systems+'/50 · Team '+SIM.staffN+' (skill '+SIM.teamSkill+') · Streak '+Math.min(SIM.profitStreak,3)+'/3'+(SIM.debt&&SIM.debt.balance>1?'\nSBA loan: '+fmt(SIM.debt.balance):''))}},
+    {label:'Never mind',fn(){}},
+  ])},
+  table(){
+    if(SIM.grind)return say('You\'ve already pushed yourself to the limit this month.');
+    menu('The cutting table','Shears, chalk, and your own two hands.',[
+      {label:'🔥 GRIND (+60% your output, ⚡25)',fn(){
+        if(SIM.energy<25)return say('Your hands are shaking. You need rest, not more coffee.');
+        SIM.energy-=25;SIM.grind=true;
+        say('You work nights and weekends. The garments are perfect.\n...The business just learned to need you a little more.');hud()}},
+      {label:'Step away',fn(){}},
+    ])},
+  posters(){menu('The campaign wall','Last season\'s posters are looking tired.',[
+    {label:'📣 New campaign (-$1,500, ⚡10)',fn(){
+      if(SIM.energy<10)return say('Not enough energy.');
+      if(SIM.cash<1500)return say('Not enough cash.');
+      SIM.energy-=10;SIM.cash-=1500;SIM.mktMonths=2;
+      say('New campaign up. Expect more walk-ins for two months.');hud()}},
+    {label:'Leave them',fn(){}},
+  ])},
+  archive(){menu('The pattern archive','Blocks, measurements, supplier specs — your craft, on paper.',[
+    {label:'🧩 Build systems (-$400, ⚡20)',fn(){
+      if(SIM.energy<20)return say('Not enough energy.');
+      if(SIM.cash<400)return say('Not enough cash.');
+      SIM.energy-=20;SIM.cash-=400;SIM.systems=clamp(SIM.systems+5,0,100);
+      say('You wrote down how the magic works. Systems +5.'+(SIM.systems>=50?'\nThe atelier could almost run on these binders alone.':''));hud()}},
+    {label:'Close the drawer',fn(){}},
+  ])},
+  mannequin(){
+    if(SIM.month<6)return say('The dress form stares back, waiting. New collections unlock after month 6.');
+    if(SIM.lineCooldown>0)return say('The new line is still settling in. Try again in '+SIM.lineCooldown+' month(s).');
+    menu('A blank dress form','A new collection, waiting to exist.',[
+      {label:'✨ Launch new line (-$6,000, ⚡20)',fn(){
+        if(SIM.energy<20)return say('Not enough energy.');
+        if(SIM.cash<6000)return say('Not enough cash.');
+        SIM.energy-=20;SIM.cash-=6000;SIM.demandMult*=1.18;SIM.rep=clamp(SIM.rep+3,0,100);SIM.lineCooldown=6;
+        say('The new collection drops. The market noticed. Demand +18%, permanently.');hud()}},
+      {label:'Not yet',fn(){}},
+    ])},
+  sofa(){
+    if(SIM.energy>=100)return say('You\'re fully rested. Suspicious, for a founder.');
+    SIM.energy=clamp(SIM.energy+40,0,100);
+    say('You sink into the velvet and actually rest. Energy +40.');hud()},
+  rack(){say(SIM.rep<40?'The racks are full. The shop is quiet. Reputation fills rooms — keep building yours.':'Clients drift between the racks. The room hums. This is what reputation '+Math.round(SIM.rep)+' looks like.')},
+  mirror(){say('Looking sharp'+(SIM.energy<30?' — and exhausted. The mirror doesn\'t lie, founder.':', founder. The gold coat works.'))},
+  staff(){menu('Your tailor looks up','',[
+    {label:'🎓 Train the team (-$600, ⚡15)',fn(){
+      if(SIM.energy<15)return say('Not enough energy.');
+      if(SIM.cash<600)return say('Not enough cash.');
+      SIM.energy-=15;SIM.cash-=600;SIM.teamSkill=clamp(SIM.teamSkill+8,0,100);
+      say('Training day. Standards, reps, craft. Team skill +8.');hud()}},
+    {label:'💬 "How\'s it going?"',fn(){
+      say(SIM.teamSkill<30?'"Honestly? I\'m mostly guessing. Some training would help."':SIM.teamSkill<70?'"Getting the hang of it. The checklists help a lot."':'"Boss, honestly — we\'ve got this. Go take a day off."')}},
+    {label:'Back to work',fn(){}},
+  ])},
+  door(){
+    const m=[{label:'🌙 Close out the month',fn(){doMonth(false)}}];
+    if(eligible()&&!SIM.won)m.push({label:'✨ THE 30-DAY TEST ✨',fn(){
+      sayT('The trip is booked','Phone off. Laptop home. For thirty days the atelier is on its own — your team, your systems, your reputation. Whatever you actually built.',()=>doMonth(true))}});
+    m.push({label:'Stay a while longer',fn(){}});
+    menu('The front door','End the month?',m)},
+};
+function doMonth(vac){
+  const r=simMonth(vac);hud();
+  let t=(vac?'✈ You were GONE the whole month.\n':'')+
+    'Revenue: '+fmt(r.revenue)+'  ('+Math.round(r.units)+' commissions)\nCosts: '+fmt(-r.costs)+'\nNET: '+fmt(r.net)+(r.net>=0?'  🟢':'  🔴');
+  if(r.demand>r.cap*1.05)t+='\n\nYou turned clients away — demand outgrew your hands.';
+  sayT('Month '+SIM.month,t,()=>{
+    if(vac){
+      if(r.net>0)return winSeq(r.net);
+      return sayT('📞 The business missed you','You came home to '+fmt(r.net)+' in losses and a team that kept calling. More systems. More training. The 30-day test doesn\'t lie.');
+    }
+    if(SIM.cash<-15000)return sayT('💀 Bankruptcy','The money ran out and stayed out. The landlord changed the locks.\n\nRefresh to run it back.',()=>{SIM.over=true});
+    maybeEvent();
+  });
+}
+function maybeEvent(){
+  if(Math.random()>0.3)return;
+  const evs=[];
+  if(SIM.staffN>0&&SIM.teamSkill<35)evs.push(()=>{SIM.staffN--;if(staffNPCs.length>SIM.staffN)staffNPCs.pop();
+    sayT('🚪 A tailor quit this morning','"I never really knew what I was doing here."\n\nPeople don\'t quit jobs. They quit chaos.');hud()});
+  evs.push(()=>{SIM.cash-=1800;sayT('🔧 The steam press died mid-fitting','Emergency repair: -$1,800.\n\nStuff breaks on schedule. Yours just isn\'t written down.');hud()});
+  if(SIM.rep>30)evs.push(()=>{SIM.rep=clamp(SIM.rep+7,0,100);SIM.mktMonths=Math.max(SIM.mktMonths,2);
+    sayT('📱 You went viral','A client\'s wedding photos blew up — your suit is in every frame. Reputation +7.');hud()});
+  rnd(evs)();
+}
+let confettiT=0;
+function winSeq(net){SIM.won=true;confettiT=9;
+  sayT('🗽 YOU ESCAPED THE RAT RACE','While you were on a beach, the atelier made '+fmt(net)+' WITHOUT YOU.\n\nThe machine runs. You are no longer the engine — you\'re the owner.\n\nTime to freedom: '+SIM.month+' months.')}
+
+/* ============ INPUT ============ */
+const KEYS={};
+document.querySelectorAll('.dbtn[data-d]').forEach(b=>{
+  const d=b.dataset.d;
+  const on=e=>{e.preventDefault();KEYS[d]=true;b.classList.add('held')};
+  const off=e=>{e.preventDefault();KEYS[d]=false;b.classList.remove('held')};
+  b.addEventListener('pointerdown',on);b.addEventListener('pointerup',off);
+  b.addEventListener('pointerleave',off);b.addEventListener('pointercancel',off);
+});
+$('abtn').addEventListener('pointerdown',e=>{e.preventDefault();pressA()});
+$('dlg').addEventListener('pointerdown',e=>{if(!DLG||DLG.hasBtns)return;e.preventDefault();tapDialogue()});
+cv.addEventListener('pointerdown',()=>{if(DLG&&!DLG.hasBtns)tapDialogue()});
+window.addEventListener('keydown',e=>{
+  const map={ArrowUp:'up',w:'up',ArrowDown:'down',s:'down',ArrowLeft:'left',a:'left',ArrowRight:'right',d:'right'};
+  if(map[e.key]){e.preventDefault();if(!DLG)KEYS[map[e.key]]=true}
+  if(e.key===' '||e.key==='Enter'||e.key==='e'){e.preventDefault();pressA()}
+});
+window.addEventListener('keyup',e=>{
+  const map={ArrowUp:'up',w:'up',ArrowDown:'down',s:'down',ArrowLeft:'left',a:'left',ArrowRight:'right',d:'right'};
+  if(map[e.key])KEYS[map[e.key]]=false;
+});
+function pressA(){
+  if(DLG){if(!DLG.hasBtns)tapDialogue();return}
+  if(SIM.over)return;
+  let fx=player.x,fy=player.y;
+  if(player.dir==='up')fy--;else if(player.dir==='down')fy++;
+  else if(player.dir==='left')fx--;else fx++;
+  for(const n of staffNPCs){if(Math.round(n.x)===fx&&Math.round(n.y)===fy)return ACT.staff()}
+  const hs=hotspotAt(fx,fy);
+  if(hs&&ACT[hs])ACT[hs]();
+}
+
+/* ============ MOVEMENT ============ */
+const SPEED=2.6;
+function updatePlayer(){
+  if(DLG||SIM.over){player.moving=false;return}
+  if(!player.moving){
+    let dx=0,dy=0,dir=null;
+    if(KEYS.up){dy=-1;dir='up'}else if(KEYS.down){dy=1;dir='down'}
+    else if(KEYS.left){dx=-1;dir='left'}else if(KEYS.right){dx=1;dir='right'}
+    if(dir){player.dir=dir;
+      const nx=player.x+dx,ny=player.y+dy;
+      const occ=staffNPCs.concat(customers).some(n=>Math.round(n.x)===nx&&Math.round(n.y)===ny);
+      if(!solid(nx,ny)&&!occ){player.tx=nx;player.ty=ny;player.moving=true}}
+  }
+  if(player.moving){
+    const tx=player.tx*T,ty=player.ty*T;
+    player.px+=Math.sign(tx-player.px)*Math.min(SPEED*SC,Math.abs(tx-player.px));
+    player.py+=Math.sign(ty-player.py)*Math.min(SPEED*SC,Math.abs(ty-player.py));
+    player.ft+=0.22;
+    if(player.px===tx&&player.py===ty){player.x=player.tx;player.y=player.ty;player.moving=false}
+  }else player.ft=0;
+}
+function spawnCustomer(){
+  const c=makeChar(rnd(['alex','amelia','bob','molly']),DOOR.x,10,'up');
+  c.px=DOOR.x*T;c.py=10*T;
+  const spot=rnd(RACK_SPOTS);
+  c.path=[[7,8],[spot[0],spot[1]]];c.pi=0;c.wait=2.5+Math.random()*3;c.leaving=false;
+  customers.push(c);
+}
+function updateCustomers(dt){
+  custTimer-=dt;
+  const interval=Math.max(2.5,14-SIM.rep/9);
+  if(custTimer<=0&&customers.length<4&&!SIM.over){spawnCustomer();custTimer=interval*(0.7+Math.random()*0.6)}
+  customers=customers.filter(c=>{
+    const t=c.path[c.pi];
+    if(t){const tx=t[0]*T,ty=t[1]*T,dx=tx-c.px,dy=ty-c.py;
+      c.moving=true;
+      if(Math.abs(dx)>1.5){c.px+=Math.sign(dx)*1.7*SC;c.dir=dx>0?'right':'left';c.ft+=0.18}
+      else if(Math.abs(dy)>1.5){c.py+=Math.sign(dy)*1.7*SC;c.dir=dy>0?'down':'up';c.ft+=0.18}
+      else{c.px=tx;c.py=ty;c.x=t[0];c.y=t[1];c.pi++}
+    }else if(!c.leaving){c.moving=false;c.dir='up';c.wait-=dt;
+      if(c.wait<=0){c.leaving=true;c.path=[[7,8],[DOOR.x,10]];c.pi=0}}
+    else return false;
+    if(c.leaving&&c.pi>=c.path.length)return false;
+    return true;
+  });
+}
+
+/* ============ RENDER ============ */
+function tile(sheet,sx,sy,dx,dy,w,h){
+  ctx.drawImage(IMGS[sheet],sx*16,sy*16,(w||1)*16,(h||1)*16,dx*T,dy*T,(w||1)*T,(h||1)*T);
+}
+function draw(){
+  ctx.fillStyle='#0b0b10';ctx.fillRect(0,0,cv.width,cv.height);
+  // floor (herringbone)
+  for(let y=2;y<11;y++)for(let x=0;x<MW;x++)tile('floor',8,10,x,y);
+  // wall band (2 rows)
+  for(let x=0;x<MW;x++){tile('wall',8,0,x,0);tile('wall',8,1,x,1)}
+  // floor shadow under wall
+  ctx.fillStyle='rgba(0,0,0,.22)';ctx.fillRect(0,2*T,MW*T,10);
+  // bottom band + door
+  ctx.fillStyle='#16121b';ctx.fillRect(0,11*T,MW*T,T);
+  ctx.fillStyle='#241c2b';ctx.fillRect(0,11*T,MW*T,8);
+  tile('floor',8,10,DOOR.x,11);
+  ctx.fillStyle='rgba(212,175,55,.25)';ctx.fillRect(DOOR.x*T+6,11*T+6,T-12,T-12);
+  // under-objects (rug)
+  OBJS.forEach(o=>{if(o.under)tile(o.s,o.sx,o.sy,o.x,o.y,o.w,o.h)});
+  // wall-mounted
+  OBJS.forEach(o=>{if(o.wall)tile(o.s,o.sx,o.sy,o.x,o.y,o.w,o.h)});
+  // y-sorted objects + characters
+  const items=[];
+  OBJS.forEach(o=>{if(!o.wall&&!o.under)items.push({base:(o.y+o.h)*T,draw:()=>tile(o.s,o.sx,o.sy,o.x,o.y,o.w,o.h)})});
+  staffNPCs.concat(customers,[player]).forEach(c=>{
+    items.push({base:c.py+T,draw:()=>{
+      ctx.fillStyle='rgba(0,0,0,.25)';
+      ctx.beginPath();ctx.ellipse(c.px+T/2,c.py+T-4,T*0.32,T*0.13,0,0,7);ctx.fill();
+      drawChar(c)}})});
+  items.sort((a,b)=>a.base-b.base).forEach(i=>i.draw());
+  // hotspot sparkles
+  const pulse=0.45+0.3*Math.sin(performance.now()/350);
+  ctx.fillStyle='rgba(212,175,55,'+pulse+')';ctx.font='bold '+(10*SC)+'px monospace';ctx.textAlign='center';
+  OBJS.forEach(o=>{if(o.hs&&o.hs!=='rack'&&o.hs!=='mirror')ctx.fillText('✦',(o.x+o.w/2)*T,(o.y+(o.wall?2.45:-0.15))*T)});
+  ctx.fillText('✦',(DOOR.x+0.5)*T,10.8*T);
+  ctx.textAlign='left';
+  // dusk lighting vignette
+  const g=ctx.createRadialGradient(cv.width/2,cv.height*0.45,cv.width*0.25,cv.width/2,cv.height*0.5,cv.width*0.75);
+  g.addColorStop(0,'rgba(255,210,140,.05)');g.addColorStop(1,'rgba(10,8,18,.28)');
+  ctx.fillStyle=g;ctx.fillRect(0,0,cv.width,cv.height);
+  if(confettiT>0){confettiT-=1/60;
+    for(let i=0;i<6;i++){ctx.fillStyle=['#d4af37','#a23b4e','#3f7d5d','#f5efe0'][i%4];
+      ctx.fillRect(Math.random()*cv.width,(performance.now()/3+i*97)%cv.height,5,5)}}
+}
+function hud(){
+  $('monthChip').textContent='M'+SIM.month;
+  $('cashChip').textContent=fmt(SIM.cash);
+  $('cashChip').style.color=SIM.cash<0?'#f87171':'';
+  const e=$('enChip');e.textContent='⚡ '+Math.round(SIM.energy);e.classList.toggle('low',SIM.energy<25);
+  $('freeChip').textContent='🗽 '+(100-SIM.dep)+'%'+(eligible()?' ✨':'');
+}
+
+/* ============ LOOP ============ */
+let last=performance.now();
+function tick(now){const dt=Math.min(0.05,(now-last)/1000);last=now;
+  updatePlayer();updateCustomers(dt);draw()}
+function loop(now){tick(now);requestAnimationFrame(loop)}
+setInterval(()=>{const n=performance.now();if(n-last>100)tick(n)},50);
+function boot(){
+  $('loading').style.display='none';
+  hud();
+  requestAnimationFrame(loop);
+  sayT('Welcome to MAISON NOIR','Your atelier. Walk with the D-pad, press A at the glowing ✦ marks: the desk, the cutting table, the campaign wall, the archive, the sofa.\n\nGoal: build a business that runs WITHOUT you — then walk out that door for 30 days and win.');
+}
+</script>
+</body>
+</html>
