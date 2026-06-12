@@ -1,5 +1,5 @@
 /* FOUNDER MODE offline cache */
-const CACHE = 'founder-mode-v1';
+const CACHE = 'founder-mode-v2';
 const ASSETS = [
   './',
   './index.html',

@@ -155,6 +155,17 @@ input.namein:focus{border-color:var(--ac)}
 .toast{background:var(--card2);border:1px solid color-mix(in srgb,var(--ac) 45%,transparent);color:var(--txt);
   padding:12px 26px;border-radius:999px;font-size:13.5px;box-shadow:0 10px 40px rgba(0,0,0,.5);animation:toastIn .3s ease}
 @keyframes toastIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+/* action tap feedback */
+.act:active{transform:scale(.96);border-color:var(--ac)}
+.floater{position:fixed;font-weight:800;font-size:14px;pointer-events:none;z-index:80;opacity:0;
+  text-shadow:0 2px 8px rgba(0,0,0,.75);animation:floatUp 1s ease-out forwards}
+@keyframes floatUp{0%{opacity:0;transform:translateY(6px)}15%{opacity:1}100%{opacity:0;transform:translateY(-48px)}}
+.ping{position:fixed;border:2px solid var(--ac);border-radius:16px;pointer-events:none;z-index:79;animation:pingOut .5s ease-out forwards}
+@keyframes pingOut{0%{opacity:.95;transform:scale(.98)}100%{opacity:0;transform:scale(1.07)}}
+#energyChip{font-variant-numeric:tabular-nums;color:#4ade80;border-color:rgba(74,222,128,.4)}
+#energyChip.low{color:#f87171;border-color:rgba(248,113,113,.55)}
+.bump{animation:bump .45s ease}
+@keyframes bump{30%{transform:scale(1.22)}}
 .confetti{position:fixed;top:-30px;font-size:22px;z-index:70;animation:fall linear forwards;pointer-events:none}
 @keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:.6}}
 .summList{margin:20px 0;display:flex;flex-direction:column;gap:10px}
@@ -284,6 +295,7 @@ body{padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-ri
     <div id="brandTitle"><span class="em"></span><span class="nm"></span></div>
     <div class="chip" id="monthChip">Month 1</div>
     <div class="chip gold" id="levelChip">Garage Era</div>
+    <div class="chip" id="energyChip">⚡ 100</div>
     <div id="cashBox"><div class="lbl">Cash</div><div id="cashVal">$0</div></div>
   </div>
   <div id="gamegrid">
@@ -537,16 +549,39 @@ const ACTIONS=[
   can:()=>S.energy<100,
   run(){S.energy=clamp(S.energy+40,0,100);logLine('M'+(S.month+1),'You actually slept. Revolutionary.')}},
 ];
-function tryAction(k){
+let actLock=0;
+function tryAction(k,ev){
   if(S.over)return;
+  if(Date.now()-actLock<350)return; // swallow accidental double-taps
   const a=ACTIONS.find(x=>x.key===k);
   if(a.can&&!a.can())return;
   if(S.energy<a.en){toast('Not enough energy — rest, or end the month');return}
   if(S.cash<a.cash){toast('Not enough cash');return}
+  actLock=Date.now();
+  const card=ev?ev.currentTarget:null;
   S.energy-=a.en;S.cash-=a.cash;
   a.run();
+  fxAction(card,a);
+  if(navigator.vibrate)navigator.vibrate(12);
   if(S.energy<=5&&!S.forcedRest)triggerBurnout();
   render();save();
+}
+function fxAction(card,a){
+  if(!card)return;
+  const r=card.getBoundingClientRect();
+  const ping=document.createElement('div');ping.className='ping';
+  ping.style.left=r.left+'px';ping.style.top=r.top+'px';
+  ping.style.width=r.width+'px';ping.style.height=r.height+'px';
+  document.body.appendChild(ping);setTimeout(()=>ping.remove(),520);
+  const bits=[{t:'✓ '+a.name,c:'var(--ac)'}];
+  if(a.en)bits.push({t:'⚡ −'+a.en,c:'#4ade80'});
+  if(a.cash)bits.push({t:'−'+fmt(a.cash),c:'#f87171'});
+  bits.forEach((b,i)=>{
+    const f=document.createElement('div');f.className='floater';f.textContent=b.t;
+    f.style.color=b.c;f.style.left=(r.left+14)+'px';f.style.top=(r.top+12+i*20)+'px';
+    f.style.animationDelay=(i*0.1)+'s';
+    document.body.appendChild(f);setTimeout(()=>f.remove(),1400);
+  });
 }
 function triggerBurnout(){
   S.burnouts++;S.forcedRest=true;
@@ -852,6 +887,10 @@ function render(){
   const avg=S.revHist.slice(-3);const a3=avg.length?avg.reduce((x,y)=>x+y,0)/avg.length:0;
   let lvl=LEVELS[0][1];for(const[th,n]of LEVELS)if(a3>=th)lvl=n;
   $('levelChip').textContent=lvl;
+  // energy chip: always visible in the sticky bar, bumps on change, red when low
+  const ec=$('energyChip'),eNow=Math.round(S.energy);
+  if(ec.dataset.v&&ec.dataset.v!==''+eNow){ec.classList.remove('bump');void ec.offsetWidth;ec.classList.add('bump')}
+  ec.dataset.v=''+eNow;ec.textContent='⚡ '+eNow;ec.classList.toggle('low',eNow<25);
   // cash ticker
   animCash();
   // you panel
@@ -874,7 +913,7 @@ function render(){
   $('staffChip').textContent=S.staff.length+' staff · '+fmt(S.staff.reduce((a,p)=>a+p.salary,0))+'/mo payroll';
   let html=ACTIONS.map(a=>{
     const ok=(!a.can||a.can())&&S.energy>=a.en&&S.cash>=a.cash&&!S.over;
-    return `<button class="act ${ok?'':'off'}" onclick="tryAction('${a.key}')">
+    return `<button class="act ${ok?'':'off'}" onclick="tryAction('${a.key}',event)">
       <div class="em">${a.emoji}</div><h5>${a.name}</h5><p>${a.desc}</p>
       <div class="cost">${a.en?`<span>⚡ ${a.en}</span>`:''}${a.cash?`<span>${fmt(a.cash)}</span>`:''}</div></button>`;
   }).join('');
