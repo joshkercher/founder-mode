@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0b0b10">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Founder Mode">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>FOUNDER MODE — Build the business. Then escape it.</title>
+<style>
+:root{
+  --ac:#d4af37;
+  --bg:#0b0b10;
+  --card:#15151d;
+  --card2:#1c1c26;
+  --line:rgba(255,255,255,.08);
+  --txt:#eceae4;
+  --dim:#9a97a3;
+  --good:#4ade80;
+  --bad:#f87171;
+  --serif:'Bodoni 72','Didot','Playfair Display',Georgia,serif;
+  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--txt);font-family:var(--sans);min-height:100vh;
+  background-image:radial-gradient(1200px 600px at 70% -10%, rgba(212,175,55,.07), transparent),
+                   radial-gradient(900px 500px at 10% 110%, rgba(120,100,255,.05), transparent);}
+.screen{display:none;max-width:1180px;margin:0 auto;padding:40px 24px 80px}
+.screen.on{display:block;animation:fade .4s ease}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+h1.logo{font-family:var(--serif);font-size:64px;letter-spacing:.12em;text-align:center;font-weight:500}
+.tagline{text-align:center;color:var(--ac);letter-spacing:.3em;text-transform:uppercase;font-size:12px;margin-top:10px}
+.sub{text-align:center;color:var(--dim);margin-top:16px;font-size:15px;max-width:560px;margin-left:auto;margin-right:auto;line-height:1.6}
+.center{text-align:center}
+.btn{display:inline-block;background:linear-gradient(135deg,var(--ac),color-mix(in srgb,var(--ac) 60%,#fff 10%));
+  color:#111;font-weight:700;border:none;border-radius:999px;padding:14px 36px;font-size:15px;cursor:pointer;
+  letter-spacing:.04em;transition:transform .15s,box-shadow .15s;font-family:var(--sans)}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px color-mix(in srgb,var(--ac) 35%,transparent)}
+.btn:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none}
+.btn.ghost{background:transparent;color:var(--txt);border:1px solid var(--line)}
+.btn.small{padding:9px 22px;font-size:13px}
+.steplabel{color:var(--ac);letter-spacing:.25em;text-transform:uppercase;font-size:11px;text-align:center;margin-bottom:8px}
+h2.step{font-family:var(--serif);font-size:38px;text-align:center;font-weight:500;margin-bottom:6px}
+.stepsub{text-align:center;color:var(--dim);margin-bottom:34px;font-size:14px;line-height:1.6}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.g5{grid-template-columns:repeat(5,1fr)}
+@media(max-width:900px){.g3,.g4,.g5{grid-template-columns:repeat(2,1fr)}.g2{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;cursor:pointer;
+  transition:transform .15s,border-color .15s,box-shadow .15s;position:relative}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--ac) 50%,transparent)}
+.card.sel{border-color:var(--ac);box-shadow:0 0 0 1px var(--ac),0 10px 40px color-mix(in srgb,var(--ac) 20%,transparent)}
+.card.off{opacity:.38;cursor:not-allowed}
+.card.off:hover{transform:none;border-color:var(--line)}
+.card .em{font-size:34px}
+.card h3{font-family:var(--serif);font-size:20px;margin:10px 0 6px;font-weight:600;letter-spacing:.02em}
+.card p{color:var(--dim);font-size:13px;line-height:1.55}
+.card .meta{margin-top:12px;display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:10.5px;letter-spacing:.05em;padding:4px 9px;border-radius:999px;background:var(--card2);border:1px solid var(--line);color:var(--dim)}
+.tag.gold{color:var(--ac);border-color:color-mix(in srgb,var(--ac) 40%,transparent)}
+.money{color:var(--ac);font-weight:700;font-size:15px;margin-top:10px}
+.avgrid{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:30px}
+.av{font-size:38px;width:72px;height:72px;display:flex;align-items:center;justify-content:center;border-radius:18px;
+  background:var(--card);border:1px solid var(--line);cursor:pointer;transition:all .15s}
+.av:hover{transform:scale(1.08)}
+.av.sel{border-color:var(--ac);box-shadow:0 0 0 1px var(--ac);background:var(--card2)}
+input.namein{display:block;margin:0 auto 30px;background:var(--card);border:1px solid var(--line);border-radius:14px;
+  color:var(--txt);font-size:18px;padding:14px 22px;width:340px;text-align:center;font-family:var(--serif);letter-spacing:.04em;outline:none}
+input.namein:focus{border-color:var(--ac)}
+.navrow{display:flex;justify-content:center;gap:14px;margin-top:38px}
+
+/* ===== GAME SCREEN ===== */
+#topbar{display:flex;align-items:center;gap:18px;padding:14px 22px;background:var(--card);border:1px solid var(--line);
+  border-radius:18px;margin-bottom:18px;flex-wrap:wrap}
+#brandTitle{font-family:var(--serif);font-size:22px;letter-spacing:.06em}
+#brandTitle .em{margin-right:8px}
+.chip{font-size:11.5px;letter-spacing:.08em;padding:6px 14px;border-radius:999px;background:var(--card2);border:1px solid var(--line);color:var(--dim);text-transform:uppercase}
+.chip.gold{color:var(--ac);border-color:color-mix(in srgb,var(--ac) 45%,transparent)}
+#cashBox{margin-left:auto;text-align:right}
+#cashBox .lbl{font-size:10px;letter-spacing:.2em;color:var(--dim);text-transform:uppercase}
+#cashVal{font-size:28px;font-weight:800;font-variant-numeric:tabular-nums}
+#gamegrid{display:grid;grid-template-columns:280px 1fr 320px;gap:18px;align-items:start}
+@media(max-width:1080px){#gamegrid{grid-template-columns:1fr}}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:18px}
+.panel h4{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);margin-bottom:14px}
+.statrow{margin-bottom:13px}
+.statrow .top{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px}
+.statrow .top b{font-variant-numeric:tabular-nums}
+.bar{height:7px;border-radius:99px;background:var(--card2);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--ac),color-mix(in srgb,var(--ac) 55%,#fff 15%));transition:width .5s ease}
+.bar.g i{background:linear-gradient(90deg,#34d399,#86efac)}
+.bar.r i{background:linear-gradient(90deg,#f87171,#fca5a5)}
+.bar.b i{background:linear-gradient(90deg,#60a5fa,#93c5fd)}
+#youHead{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+#youHead .av2{font-size:34px;width:58px;height:58px;display:flex;align-items:center;justify-content:center;border-radius:16px;background:var(--card2)}
+#youHead .nm{font-family:var(--serif);font-size:18px}
+#youHead .tr{font-size:11.5px;color:var(--ac)}
+.teamline{display:flex;justify-content:space-between;font-size:12.5px;padding:6px 0;border-bottom:1px dashed var(--line);color:var(--dim)}
+.teamline b{color:var(--txt);font-weight:600}
+.debtline{display:flex;justify-content:space-between;font-size:12.5px;padding:6px 0;color:var(--dim)}
+.debtline b{color:var(--bad)}
+#actionsGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:700px){#actionsGrid{grid-template-columns:repeat(2,1fr)}}
+.act{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;cursor:pointer;transition:all .15s;text-align:left;color:var(--txt);font-family:var(--sans)}
+.act:hover{border-color:color-mix(in srgb,var(--ac) 55%,transparent);transform:translateY(-2px)}
+.act.off{opacity:.35;cursor:not-allowed}
+.act.off:hover{transform:none;border-color:var(--line)}
+.act .em{font-size:24px}
+.act h5{font-size:13.5px;margin:8px 0 4px;font-weight:700}
+.act p{font-size:11px;color:var(--dim);line-height:1.45}
+.act .cost{margin-top:8px;display:flex;gap:6px;flex-wrap:wrap}
+.act .cost span{font-size:10px;padding:3px 8px;border-radius:99px;background:var(--card2);border:1px solid var(--line);color:var(--dim)}
+.act.special{border-color:var(--ac);background:linear-gradient(135deg,color-mix(in srgb,var(--ac) 14%,var(--card)),var(--card))}
+#endBtn{width:100%;margin-top:16px;padding:18px;font-size:17px;letter-spacing:.1em}
+#checkPanel .ck{display:flex;align-items:center;gap:10px;font-size:12.5px;padding:6px 0;color:var(--dim)}
+#checkPanel .ck.done{color:var(--good)}
+#checkPanel .ck .box{width:18px;height:18px;border-radius:6px;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+#checkPanel .ck.done .box{background:color-mix(in srgb,var(--good) 25%,transparent);border-color:var(--good)}
+#plPanel table{width:100%;border-collapse:collapse;font-size:12.5px}
+#plPanel td{padding:5px 0;color:var(--dim)}
+#plPanel td:last-child{text-align:right;font-variant-numeric:tabular-nums;color:var(--txt)}
+#plPanel tr.net td{border-top:1px solid var(--line);padding-top:9px;font-weight:700;color:var(--txt);font-size:14px}
+#sparkWrap{margin-top:6px}
+#spark{width:100%;height:64px;display:block}
+#logPanel{max-height:280px;overflow-y:auto}
+.logline{font-size:12px;color:var(--dim);padding:7px 0;border-bottom:1px dashed var(--line);line-height:1.5}
+.logline b{color:var(--ac);font-weight:600}
+
+/* ===== MODALS ===== */
+#modalRoot{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(5,5,10,.78);z-index:50;backdrop-filter:blur(6px)}
+#modalRoot.on{display:flex}
+#modalBox{background:var(--card);border:1px solid color-mix(in srgb,var(--ac) 35%,var(--line));border-radius:22px;
+  max-width:560px;width:92%;padding:34px;max-height:86vh;overflow-y:auto;animation:pop .3s ease}
+@keyframes pop{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+#modalBox h3{font-family:var(--serif);font-size:26px;margin-bottom:14px;font-weight:600;line-height:1.25}
+#modalBox .body{color:var(--dim);font-size:14px;line-height:1.7}
+#modalBox .body b{color:var(--txt)}
+#modalBox .lesson{margin-top:18px;padding:14px 16px;border-radius:14px;background:color-mix(in srgb,var(--ac) 9%,transparent);
+  border:1px solid color-mix(in srgb,var(--ac) 30%,transparent);font-size:13px;line-height:1.6;color:var(--txt)}
+#modalBox .lesson::before{content:'💡 LESSON';display:block;font-size:10px;letter-spacing:.25em;color:var(--ac);margin-bottom:6px;font-weight:700}
+#modalBox .btns{display:flex;flex-direction:column;gap:10px;margin-top:24px}
+#modalBox .btns .btn{width:100%;text-align:center}
+#modalBox .btns .hint{font-size:11px;color:var(--dim);text-align:center;margin-top:-4px}
+#modalBox table.pl{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:14px}
+#modalBox table.pl td{padding:7px 0;color:var(--dim);border-bottom:1px dashed var(--line)}
+#modalBox table.pl td:last-child{text-align:right;font-variant-numeric:tabular-nums;color:var(--txt)}
+#modalBox table.pl tr.net td{font-weight:800;font-size:17px;border-bottom:none;padding-top:12px}
+#toastRoot{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:60;display:flex;flex-direction:column;gap:10px;align-items:center}
+.toast{background:var(--card2);border:1px solid color-mix(in srgb,var(--ac) 45%,transparent);color:var(--txt);
+  padding:12px 26px;border-radius:999px;font-size:13.5px;box-shadow:0 10px 40px rgba(0,0,0,.5);animation:toastIn .3s ease}
+@keyframes toastIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.confetti{position:fixed;top:-30px;font-size:22px;z-index:70;animation:fall linear forwards;pointer-events:none}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:.6}}
+.summList{margin:20px 0;display:flex;flex-direction:column;gap:10px}
+.summList .row{display:flex;justify-content:space-between;background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:12px 18px;font-size:14px}
+.summList .row span:first-child{color:var(--dim)}
+
+/* ===== MOBILE / PWA ===== */
+*{-webkit-tap-highlight-color:transparent}
+button{touch-action:manipulation}
+body{padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+@media(max-width:640px){
+  .screen{padding:max(20px,env(safe-area-inset-top)) 14px 70px}
+  h1.logo{font-size:42px;letter-spacing:.08em}
+  .tagline{letter-spacing:.2em}
+  h2.step{font-size:27px}
+  .stepsub{margin-bottom:22px}
+  .grid{gap:12px}
+  .g2,.g3,.g4,.g5{grid-template-columns:1fr}
+  .card{padding:18px}
+  .card h3{font-size:18px}
+  .avgrid{gap:9px}
+  .av{width:60px;height:60px;font-size:30px}
+  input.namein{width:100%;max-width:360px}
+  .navrow{position:sticky;bottom:0;padding:12px 0 max(10px,env(safe-area-inset-bottom));
+    background:linear-gradient(transparent,var(--bg) 35%);z-index:5}
+  #topbar{gap:8px;padding:12px 14px;border-radius:14px;position:sticky;top:max(6px,env(safe-area-inset-top));z-index:6;box-shadow:0 6px 24px rgba(0,0,0,.45)}
+  #brandTitle{font-size:17px}
+  .chip{font-size:10px;padding:4px 10px}
+  #cashVal{font-size:21px}
+  #gamegrid{grid-template-columns:1fr;gap:14px}
+  #gamegrid>div:nth-child(2){order:-1}  /* actions first on phone */
+  #actionsGrid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .act{padding:13px}
+  .act .em{font-size:21px}
+  .act h5{font-size:12.5px}
+  .act p{font-size:10.5px}
+  #endBtn{padding:16px;font-size:15px}
+  .panel{padding:16px;margin-bottom:14px}
+  #modalBox{padding:26px 20px;border-radius:18px}
+  #modalBox h3{font-size:21px}
+  #modalBox .body{font-size:13.5px}
+  #logPanel{max-height:200px}
+  #toastRoot{bottom:max(18px,env(safe-area-inset-bottom))}
+}
+</style>
+</head>
+<body>
+
+<!-- TITLE -->
+<div class="screen on" id="sc-title">
+  <div style="margin-top:9vh"></div>
+  <h1 class="logo">FOUNDER MODE</h1>
+  <div class="tagline">Build the business. Then escape it.</div>
+  <p class="sub">A tycoon-style sim about the decisions that set you free — and the ones that quietly trap you. Grow revenue, sure. But the real score is whether your business can survive <b style="color:var(--txt)">thirty days without you</b>.</p>
+  <div class="navrow">
+    <button class="btn" onclick="newGame()">New Game</button>
+    <button class="btn ghost" id="contBtn" style="display:none" onclick="continueGame()">Continue</button>
+  </div>
+</div>
+
+<!-- CHARACTER -->
+<div class="screen" id="sc-char">
+  <div class="steplabel">Step 1 of 5</div>
+  <h2 class="step">Who are you?</h2>
+  <p class="stepsub">Every founder brings a superpower — and a blind spot.</p>
+  <div class="avgrid" id="avGrid"></div>
+  <input class="namein" id="nameInput" placeholder="Your name" maxlength="20">
+  <div class="grid g4" id="traitGrid"></div>
+  <div class="navrow">
+    <button class="btn ghost small" onclick="show('sc-title')">Back</button>
+    <button class="btn" id="charNext" onclick="goBiz()">Continue</button>
+  </div>
+</div>
+
+<!-- BUSINESS -->
+<div class="screen" id="sc-biz">
+  <div class="steplabel">Step 2 of 5</div>
+  <h2 class="step">Pick your venture</h2>
+  <p class="stepsub">Five businesses, five completely different games. Margins, scalability, and how badly they need <i>you</i> all differ.</p>
+  <div class="grid g3" id="bizGrid"></div>
+  <div class="navrow">
+    <button class="btn ghost small" onclick="show('sc-char')">Back</button>
+    <button class="btn" onclick="goFund()">Continue</button>
+  </div>
+</div>
+
+<!-- FUNDING -->
+<div class="screen" id="sc-fund">
+  <div class="steplabel">Step 3 of 5</div>
+  <h2 class="step">Find the money</h2>
+  <p class="stepsub">How you fund the start shapes everything downstream. Cheap money is rarely cheap.</p>
+  <div class="grid g5" id="fundGrid"></div>
+  <div class="navrow">
+    <button class="btn ghost small" onclick="show('sc-biz')">Back</button>
+    <button class="btn" onclick="goLoc()">Continue</button>
+  </div>
+</div>
+
+<!-- LOCATION -->
+<div class="screen" id="sc-loc">
+  <div class="steplabel">Step 4 of 5</div>
+  <h2 class="step">Choose your ground</h2>
+  <p class="stepsub" id="locSub">Rent is the loudest fixed cost you'll ever sign.</p>
+  <div class="grid g4" id="locGrid"></div>
+  <div class="navrow">
+    <button class="btn ghost small" onclick="show('sc-fund')">Back</button>
+    <button class="btn" onclick="goSummary()">Continue</button>
+  </div>
+</div>
+
+<!-- SUMMARY -->
+<div class="screen" id="sc-summ">
+  <div class="steplabel">Step 5 of 5</div>
+  <h2 class="step">Sign the lease</h2>
+  <p class="stepsub">Name your company. Then there's no going back.</p>
+  <input class="namein" id="brandInput" placeholder="Company name" maxlength="26" style="width:420px">
+  <div class="summList" id="summList" style="max-width:520px;margin-left:auto;margin-right:auto"></div>
+  <div class="navrow">
+    <button class="btn ghost small" onclick="show('sc-loc')">Back</button>
+    <button class="btn" onclick="startGame()">Open for Business →</button>
+  </div>
+</div>
+
+<!-- GAME -->
+<div class="screen" id="sc-game">
+  <div id="topbar">
+    <div id="brandTitle"><span class="em"></span><span class="nm"></span></div>
+    <div class="chip" id="monthChip">Month 1</div>
+    <div class="chip gold" id="levelChip">Garage Era</div>
+    <div id="cashBox"><div class="lbl">Cash</div><div id="cashVal">$0</div></div>
+  </div>
+  <div id="gamegrid">
+    <div>
+      <div class="panel" id="youPanel">
+        <div id="youHead"><div class="av2"></div><div><div class="nm"></div><div class="tr"></div></div></div>
+        <div class="statrow"><div class="top"><span>⚡ Energy</span><b id="vEnergy"></b></div><div class="bar g"><i id="bEnergy"></i></div></div>
+        <div class="statrow"><div class="top"><span>🗽 Freedom</span><b id="vFree"></b></div><div class="bar"><i id="bFree"></i></div></div>
+        <div style="font-size:11px;color:var(--dim);line-height:1.5;margin-top:4px" id="depNote"></div>
+      </div>
+      <div class="panel">
+        <h4>The Business</h4>
+        <div class="statrow"><div class="top"><span>⭐ Reputation</span><b id="vRep"></b></div><div class="bar"><i id="bRep"></i></div></div>
+        <div class="statrow"><div class="top"><span>🎓 Team Skill</span><b id="vSkill"></b></div><div class="bar b"><i id="bSkill"></i></div></div>
+        <div class="statrow"><div class="top"><span>🧩 Systems</span><b id="vSys"></b></div><div class="bar b"><i id="bSys"></i></div></div>
+        <div id="teamList" style="margin-top:14px"></div>
+        <div id="debtList" style="margin-top:10px"></div>
+      </div>
+      <div class="panel" id="checkPanel">
+        <h4>Escape the Rat Race</h4>
+        <div id="checks"></div>
+      </div>
+    </div>
+    <div>
+      <div class="panel" style="padding:16px 20px;display:flex;align-items:center;gap:14px;justify-content:space-between">
+        <div style="font-size:13px;color:var(--dim)" id="energyHint"></div>
+        <div class="chip" id="staffChip"></div>
+      </div>
+      <div id="actionsGrid"></div>
+      <button class="btn" id="endBtn" onclick="endMonth()">END MONTH ▸</button>
+    </div>
+    <div>
+      <div class="panel" id="plPanel">
+        <h4>Last Month P&amp;L</h4>
+        <table id="plTable"><tr><td colspan="2" style="color:var(--dim)">Your first month awaits.</td></tr></table>
+        <div id="sparkWrap"><canvas id="spark"></canvas></div>
+      </div>
+      <div class="panel" id="logPanel">
+        <h4>The Story So Far</h4>
+        <div id="logLines"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="modalRoot"><div id="modalBox"></div></div>
+<div id="toastRoot"></div>
+
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const fmt=n=>{const s=n<0?'−':'';return s+'$'+Math.abs(Math.round(n)).toLocaleString()};
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+
+/* ================= DATA ================= */
+const AVATARS=['🧑‍🎨','👩‍💼','🧔🏽','👩🏾‍🦱','🧕','👨🏻‍💼','👱‍♀️','🧑🏽‍🦰'];
+const TRAITS=[
+ {key:'craft',name:'The Craftsman',emoji:'✂️',desc:'Obsessed with quality. Reputation grows 30% faster — but letting go is agony. Systems cost you more to build.'},
+ {key:'hustler',name:'The Hustler',emoji:'📣',desc:'Born seller. Marketing hits 40% harder and demand comes easy — but quality slips when you\'re not watching.'},
+ {key:'operator',name:'The Operator',emoji:'🧩',desc:'Systems thinker. SOPs, playbooks and training go 40% further. Less flash, more freedom.'},
+ {key:'numbers',name:'The Numbers Person',emoji:'🧮',desc:'You speak spreadsheet. Interest rates run 30% cheaper for you, and overhead stays lean.'},
+];
+const BIZ=[
+ {key:'fashion',name:'Bespoke Fashion House',emoji:'🧵',accent:'#d4af37',suggest:'MAISON NOIR',unit:'commissions',
+  price:2600,cost:800,ownerCap:5,staffCap:4,baseDemand:2,repDemand:0.22,buildout:8000,staffSalary:4200,role:'Tailor',
+  desc:'Low volume, sky-high margins. Every client is a relationship. Scales through craft talent — the hardest kind to hire.',
+  tags:['High margin','Hard to delegate','Relationship-driven'],
+  intro:'A bolt of cloth, a pair of shears, and a reputation to build one client at a time. In this business, trust is the product — the garment is just the proof.'},
+ {key:'coffee',name:'Specialty Coffee Bar',emoji:'☕',accent:'#c4813d',suggest:'DAILY RITUAL',unit:'orders',
+  price:9,cost:3.2,ownerCap:1500,staffCap:1700,baseDemand:900,repDemand:55,buildout:25000,staffSalary:3000,role:'Barista',
+  desc:'A volume game with razor-thin margins. Location is everything, and systems decide who survives year two.',
+  tags:['Thin margins','Location-driven','Very systemizable'],
+  intro:'The espresso machine gleams. The margins don\'t. In coffee, the difference between thriving and dying is about 40 cents a cup — and whoever builds the tightest system wins.'},
+ {key:'creator',name:'Creator Studio',emoji:'🎬',accent:'#a78bfa',suggest:'SIGNAL STUDIO',unit:'projects',
+  price:5200,cost:1400,ownerCap:4,staffCap:3,baseDemand:1,repDemand:0.18,buildout:6000,staffSalary:4500,role:'Producer',
+  desc:'You sell attention. Feast or famine — reputation IS the product, and burnout is the final boss.',
+  tags:['Reputation-driven','Volatile','You ARE the brand'],
+  intro:'Brand deals, content, audience. The good news: your ceiling is unlimited. The bad news: right now, every dollar this studio makes flows through your calendar.'},
+ {key:'fitness',name:'Boutique Fitness Studio',emoji:'🏋️',accent:'#34d399',suggest:'PULSE CLUB',unit:'members',
+  price:165,cost:25,ownerCap:70,staffCap:110,baseDemand:35,repDemand:4.5,buildout:18000,staffSalary:3400,role:'Coach',
+  desc:'Recurring revenue and real community. But members churn the moment the energy dips.',
+  tags:['Recurring revenue','Community','Churn risk'],
+  intro:'Memberships are the most beautiful revenue in business — it shows up every month. Your job: build a place people can\'t quit, run by coaches who aren\'t you.'},
+ {key:'app',name:'AI Software Startup',emoji:'🤖',accent:'#60a5fa',suggest:'STACK LABS',unit:'subscribers',
+  price:39,cost:6,ownerCap:250,staffCap:700,baseDemand:80,repDemand:35,buildout:4000,staffSalary:7500,role:'Engineer',
+  desc:'A slow, brutal start — then the curve bends. The only business here that truly scales without you. Talent is expensive.',
+  tags:['Scales infinitely','Slow start','Expensive talent'],
+  intro:'Code doesn\'t sleep, doesn\'t churn, doesn\'t call in sick. If you survive the early desert, this is the one business that can genuinely run itself. IF you survive.'},
+];
+const FUND=[
+ {key:'boot',name:'Bootstrap',emoji:'🥾',cash:15000,desc:'Your own savings. Zero strings, zero safety net. Constraints will force focus.'},
+ {key:'fnf',name:'Friends & Family',emoji:'👪',cash:40000,debt:{name:'Family loan',balance:40000,apr:0,minPay:0,paidI:0},desc:'No interest, no deadline — but Thanksgiving gets complicated if this goes sideways.'},
+ {key:'cc',name:'Credit Cards',emoji:'💳',cash:30000,debt:{name:'Credit cards',balance:30000,apr:0.24,minPay:600,paidI:0},desc:'Instant money at 24% APR. The minimum payment barely touches the principal. The classic trap.'},
+ {key:'sba',name:'Bank Loan',emoji:'🏦',cash:75000,debt:{name:'SBA loan',balance:75000,apr:0.09,minPay:1560,paidI:0},desc:'9% APR over 5 years. Real leverage, real monthly obligation whether you sell or not.'},
+ {key:'angel',name:'Angel Investor',emoji:'😇',cash:150000,equity:0.20,desc:'Deep pockets, high expectations. They now own 20% of everything you build — forever.'},
+];
+const LOC=[
+ {key:'home',name:'Home Studio',emoji:'🏠',rent:300,traffic:1.0,prestige:0,repCap:65,desc:'Cheap and scrappy. Nothing wrong with a garage era — but it caps how seriously the market takes you.'},
+ {key:'popup',name:'Pop-Up / Market Stall',emoji:'⛺',rent:900,traffic:1.3,prestige:4,repCap:80,desc:'Foot traffic without the lease. Flexible, visible, a little chaotic.'},
+ {key:'street',name:'Main Street Storefront',emoji:'🏬',rent:4500,traffic:1.65,prestige:8,repCap:100,desc:'Maximum visibility, maximum overhead. The rent is due whether anyone walks in or not.'},
+ {key:'showroom',name:'Private Showroom',emoji:'🥂',rent:2800,traffic:0.95,prestige:14,repCap:100,marginBonus:1.22,desc:'By appointment only. Fewer eyes, deeper pockets — clients pay a premium for the experience.'},
+];
+const LEVELS=[[0,'Garage Era'],[15000,'Local Favorite'],[40000,'On the Map'],[100000,'Regional Player'],[250000,'National Brand'],[600000,'Icon']];
+const STAFFNAMES=['Maya','Diego','Priya','Sam','Lena','Marcus','Yuki','Tess','Omar','Nia','Felix','June','Cole','Aria','Theo','Zara'];
+
+/* ================= STATE ================= */
+let S=null;
+let sel={avatar:null,trait:null,biz:null,fund:null,loc:null};
+let MQ=[]; // modal queue
+const bizOf=()=>BIZ.find(b=>b.key===S.biz);
+const locOf=()=>LOC.find(l=>l.key===S.loc);
+const trOf=()=>TRAITS.find(t=>t.key===S.trait);
+
+/* ================= SETUP SCREENS ================= */
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));$(id).classList.add('on');window.scrollTo(0,0)}
+function newGame(){sel={avatar:null,trait:null,biz:null,fund:null,loc:null};buildCharScreen();show('sc-char')}
+
+function buildCharScreen(){
+  $('avGrid').innerHTML=AVATARS.map(a=>`<div class="av" data-a="${a}" onclick="pickAv('${a}')">${a}</div>`).join('');
+  $('traitGrid').innerHTML=TRAITS.map(t=>`<div class="card" id="tr-${t.key}" onclick="pickTrait('${t.key}')">
+    <div class="em">${t.emoji}</div><h3>${t.name}</h3><p>${t.desc}</p></div>`).join('');
+}
+function pickAv(a){sel.avatar=a;document.querySelectorAll('.av').forEach(e=>e.classList.toggle('sel',e.dataset.a===a))}
+function pickTrait(k){sel.trait=k;TRAITS.forEach(t=>$('tr-'+t.key).classList.toggle('sel',t.key===k))}
+function goBiz(){
+  if(!sel.avatar){toast('Pick an avatar');return}
+  if(!$('nameInput').value.trim()){toast('Enter your name');return}
+  if(!sel.trait){toast('Pick your founder type');return}
+  $('bizGrid').innerHTML=BIZ.map(b=>`<div class="card" id="bz-${b.key}" onclick="pickBiz('${b.key}')">
+    <div class="em">${b.emoji}</div><h3>${b.name}</h3><p>${b.desc}</p>
+    <div class="meta">${b.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+    <div class="money">Buildout: ${fmt(b.buildout)}</div></div>`).join('');
+  show('sc-biz');
+}
+function pickBiz(k){sel.biz=k;BIZ.forEach(b=>$('bz-'+b.key).classList.toggle('sel',b.key===k))}
+function goFund(){
+  if(!sel.biz){toast('Pick a business');return}
+  $('fundGrid').innerHTML=FUND.map(f=>`<div class="card" id="fd-${f.key}" onclick="pickFund('${f.key}')">
+    <div class="em">${f.emoji}</div><h3>${f.name}</h3><p>${f.desc}</p>
+    <div class="money">+${fmt(f.cash)}${f.equity?' <span class="tag gold">−20% equity</span>':''}</div></div>`).join('');
+  show('sc-fund');
+}
+function pickFund(k){sel.fund=k;FUND.forEach(f=>$('fd-'+f.key).classList.toggle('sel',f.key===k))}
+function goLoc(){
+  if(!sel.fund){toast('Pick your funding');return}
+  const biz=BIZ.find(b=>b.key===sel.biz),fund=FUND.find(f=>f.key===sel.fund);
+  $('locGrid').innerHTML=LOC.map(l=>{
+    const setup=biz.buildout+l.rent*2;
+    const left=fund.cash-setup;
+    const ok=left>=1000;
+    return `<div class="card ${ok?'':'off'}" id="lc-${l.key}" ${ok?`onclick="pickLoc('${l.key}')"`:''}>
+      <div class="em">${l.emoji}</div><h3>${l.name}</h3><p>${l.desc}</p>
+      <div class="meta"><span class="tag">Rent ${fmt(l.rent)}/mo</span><span class="tag">Traffic ×${l.traffic}</span>${l.marginBonus?'<span class="tag gold">+22% pricing</span>':''}</div>
+      <div class="money">${ok?'Cash after setup: '+fmt(left):'⚠︎ Can\'t afford — need '+fmt(setup+1000)}</div></div>`;
+  }).join('');
+  $('locSub').textContent='Buildout ('+fmt(biz.buildout)+') plus a 2-month deposit come out of your '+fmt(fund.cash)+'. Rent is the loudest fixed cost you\'ll ever sign.';
+  show('sc-loc');
+}
+function pickLoc(k){sel.loc=k;LOC.forEach(l=>{const e=$('lc-'+l.key);if(e)e.classList.toggle('sel',l.key===k)})}
+function goSummary(){
+  if(!sel.loc){toast('Pick a location');return}
+  const biz=BIZ.find(b=>b.key===sel.biz),fund=FUND.find(f=>f.key===sel.fund),loc=LOC.find(l=>l.key===sel.loc),tr=TRAITS.find(t=>t.key===sel.trait);
+  $('brandInput').value=$('brandInput').value||biz.suggest;
+  const setup=biz.buildout+loc.rent*2;
+  $('summList').innerHTML=`
+    <div class="row"><span>Founder</span><b>${sel.avatar} ${$('nameInput').value.trim()} · ${tr.name}</b></div>
+    <div class="row"><span>Venture</span><b>${biz.emoji} ${biz.name}</b></div>
+    <div class="row"><span>Funding</span><b>${fund.emoji} ${fund.name} (+${fmt(fund.cash)})</b></div>
+    <div class="row"><span>Location</span><b>${loc.emoji} ${loc.name} · ${fmt(loc.rent)}/mo</b></div>
+    <div class="row"><span>Setup costs</span><b style="color:var(--bad)">−${fmt(setup)}</b></div>
+    <div class="row"><span>Opening cash</span><b style="color:var(--good)">${fmt(fund.cash-setup)}</b></div>`;
+  show('sc-summ');
+}
+
+/* ================= GAME START ================= */
+function startGame(){
+  const biz=BIZ.find(b=>b.key===sel.biz),fund=FUND.find(f=>f.key===sel.fund),loc=LOC.find(l=>l.key===sel.loc);
+  const setup=biz.buildout+loc.rent*2;
+  S={
+    name:$('nameInput').value.trim(),avatar:sel.avatar,trait:sel.trait,
+    brand:($('brandInput').value.trim()||biz.suggest).toUpperCase(),
+    biz:biz.key,fund:fund.key,loc:loc.key,
+    month:0,cash:fund.cash-setup,
+    debts:fund.debt?[JSON.parse(JSON.stringify(fund.debt))]:[],
+    equity:fund.equity?1-fund.equity:1,investorTrust:70,
+    energy:100,rep:12+loc.prestige,teamSkill:0,systems:0,staff:[],
+    priceMult:1,demandMult:1,mktMonths:0,grind:false,forcedRest:false,
+    rentMult:1,burnouts:0,profitStreak:0,yearProfit:0,
+    history:[],revHist:[],lessons:[],ach:{},receivables:[],log:[],
+    lineCooldown:0,evCool:{},negMonths:0,paydayOffered:false,fnfAsked:false,
+    lastInvCheck:0,lastRevCheck:0,dep:90,over:false,won:false,lastR:null,quitRisk:false,
+  };
+  document.documentElement.style.setProperty('--ac',biz.accent);
+  S.history.push(S.cash);
+  logLine('Month 0','You signed the lease. '+S.brand+' exists. '+fmt(S.cash)+' in the bank.');
+  show('sc-game');
+  render();
+  queueInfo('🏁 '+S.brand+' is open for business',
+    biz.intro+'<br><br><b>How to win:</b> grow your <b>Freedom</b> (the % of the business that runs without you) above 65, get <b>Systems</b> above 50, and string together <b>3 profitable months</b>. Then take <b>The 30-Day Test</b> — a full month off. If the business profits without you, you\'ve escaped the rat race.<br><br><b>How to lose:</b> run out of cash, or run out of yourself.',
+    'Revenue is vanity, profit is sanity, freedom is the actual goal.');
+  pump();
+  save();
+}
+
+/* ================= ACTIONS ================= */
+const ACTIONS=[
+ {key:'grind',emoji:'🔥',name:'Grind',en:25,cash:0,
+  desc:'Throw yourself at the work. +60% personal output this month — and the business learns to need you.',
+  can:()=>!S.grind&&!S.forcedRest,
+  run(){S.grind=true;logLine('M'+(S.month+1),'You worked nights and weekends.')}},
+ {key:'mkt',emoji:'📣',name:'Marketing Push',en:10,cash:1500,
+  desc:'Ads, content, outreach. Demand jumps for the next 2 months.',
+  run(){S.mktMonths=2;logLine('M'+(S.month+1),'Marketing campaign launched.')}},
+ {key:'hire',emoji:'🤝',name:'Hire',en:15,cash:1200,
+  desc:'Recruit one team member. They start green — salary runs monthly whether they produce or not.',
+  can:()=>S.staff.length<12,
+  run(){const b=bizOf();const n=rnd(STAFFNAMES.filter(x=>!S.staff.some(s=>s.name===x)))||'Alex';
+    S.staff.push({name:n,role:b.role,salary:b.staffSalary,loyal:false});
+    logLine('M'+(S.month+1),'Hired <b>'+n+'</b> as a '+b.role+'.');
+    if(!S.ach.firstHire){S.ach.firstHire=1;toast('🏆 First Hire — you\'re officially a boss')}}},
+ {key:'train',emoji:'🎓',name:'Train the Team',en:15,cash:600,
+  desc:'Coaching, reps, standards. Your people produce more — and stay longer.',
+  can:()=>S.staff.length>0&&S.teamSkill<100,
+  run(){S.teamSkill=clamp(S.teamSkill+8,0,100);S.quitRisk=false;logLine('M'+(S.month+1),'Team training day. Skill rising.')}},
+ {key:'sys',emoji:'🧩',name:'Build Systems',en:20,cash:400,
+  desc:'SOPs, playbooks, checklists. The business slowly stops needing your hands on everything.',
+  can:()=>S.systems<100,
+  run(){let g=7;if(S.trait==='operator')g=10;if(S.trait==='craft')g=5;
+    S.systems=clamp(S.systems+g,0,100);logLine('M'+(S.month+1),'You wrote down how the magic works. Systems +'+g+'.')}},
+ {key:'price',emoji:'🏷️',name:'Raise Prices',en:5,cash:0,
+  desc:'+8% pricing. Some customers walk — the right ones stay. Risky if your reputation is weak.',
+  run(){S.priceMult*=1.08;S.demandMult*=(S.rep>=40?0.96:0.90);
+    logLine('M'+(S.month+1),'Prices up 8%. '+(S.rep>=40?'Your reputation carried it.':'A few customers grumbled off.'))}},
+ {key:'debt',emoji:'💸',name:'Pay Down Debt',en:5,cash:0,
+  desc:'Throw up to $5,000 extra at your most expensive debt.',
+  can:()=>S.debts.length>0&&S.cash>1000,
+  run(){const d=[...S.debts].sort((a,b)=>b.apr-a.apr)[0];
+    const pay=Math.min(5000,S.cash-500,d.balance);
+    if(pay<=0)return;S.cash-=pay;d.balance-=pay;
+    logLine('M'+(S.month+1),'Paid '+fmt(pay)+' extra toward '+d.name+'.');
+    if(d.balance<=1){S.debts=S.debts.filter(x=>x!==d);toast('🎉 '+d.name+' wiped out!');
+      if(!S.ach.debtFree&&S.debts.length===0){S.ach.debtFree=1;toast('🏆 Debt Free')}}}},
+ {key:'line',emoji:'✨',name:'New Product Line',en:20,cash:6000,
+  desc:'Launch something new. Permanent +18% demand. Available every 6 months.',
+  can:()=>S.month>=6&&S.lineCooldown<=0,
+  run(){S.demandMult*=1.18;S.rep=clamp(S.rep+3,0,locOf().repCap);S.lineCooldown=6;
+    logLine('M'+(S.month+1),'New line launched. The market noticed.')}},
+ {key:'rest',emoji:'🌴',name:'Rest & Recharge',en:0,cash:0,
+  desc:'Protect the asset: you. +40 energy. The grind is a tool, not an identity.',
+  can:()=>S.energy<100,
+  run(){S.energy=clamp(S.energy+40,0,100);logLine('M'+(S.month+1),'You actually slept. Revolutionary.')}},
+];
+function tryAction(k){
+  if(S.over)return;
+  const a=ACTIONS.find(x=>x.key===k);
+  if(a.can&&!a.can())return;
+  if(S.energy<a.en){toast('Not enough energy — rest, or end the month');return}
+  if(S.cash<a.cash){toast('Not enough cash');return}
+  S.energy-=a.en;S.cash-=a.cash;
+  a.run();
+  if(S.energy<=5&&!S.forcedRest)triggerBurnout();
+  render();save();
+}
+function triggerBurnout(){
+  S.burnouts++;S.forcedRest=true;
+  S.rep=clamp(S.rep-5,0,100);
+  queueInfo('🚨 Burnout','You hit the wall. Doctor\'s orders: next month you contribute <b>nothing</b> to the business. Whatever you built without you is all that\'s working.'+(S.burnouts>=2?'<br><br>This is burnout #'+S.burnouts+'. A third one ends the run.':''),
+    'You are the most important asset on the balance sheet — and the only one that can\'t be replaced. Capacity you build in others is the only sustainable kind.');
+  pump();
+  if(S.burnouts>=3){gameOver('burnout');}
+}
+
+/* ================= SIMULATION ================= */
+function quality(){
+  let q=50+S.teamSkill*0.3+S.systems*0.2+(S.energy>40?5:-10);
+  if(S.trait==='craft')q+=10;
+  if(S.trait==='hustler')q-=8;
+  return clamp(q,0,100);
+}
+function endMonth(){
+  if(S.over)return;
+  S.month++;
+  const biz=bizOf(),loc=locOf();
+  // capacity
+  const ownerUnits=S.forcedRest?0:biz.ownerCap*(0.5+S.energy/200)*(S.grind?1.6:1);
+  const staffEff=(0.45+S.teamSkill/160)*(1+S.systems/180);
+  const staffUnits=S.staff.length*biz.staffCap*staffEff;
+  const cap=ownerUnits+staffUnits;
+  // demand
+  let mkt=1;
+  if(S.mktMonths>0){mkt=1+0.3*(S.trait==='hustler'?1.4:1);S.mktMonths--}
+  const demand=(biz.baseDemand+S.rep*biz.repDemand)*loc.traffic*mkt*S.demandMult;
+  const units=Math.min(demand,cap);
+  const price=biz.price*S.priceMult*(loc.marginBonus||1);
+  const revenue=units*price;
+  // receivables collected
+  let collected=0;
+  S.receivables=S.receivables.filter(r=>{if(r.month<=S.month){collected+=r.amount;return false}return true});
+  const cogs=units*biz.cost;
+  const salaries=S.staff.reduce((a,p)=>a+p.salary,0);
+  const rent=loc.rent*S.rentMult;
+  const opex=(600+revenue*0.05)*(S.trait==='numbers'?0.85:1);
+  // debt service
+  let interest=0,debtOut=0;
+  S.debts.forEach(d=>{
+    const apr=d.apr*(S.trait==='numbers'?0.7:1);
+    const i=d.balance*apr/12;
+    interest+=i;d.paidI=(d.paidI||0)+i;
+    const pay=Math.min(d.balance+i,d.minPay||0);
+    debtOut+=pay;
+    d.balance=Math.max(0,d.balance+i-pay);
+  });
+  S.debts=S.debts.filter(d=>d.balance>1||d.minPay===0&&d.balance>0);
+  const opNet=revenue+collected-cogs-salaries-rent-opex-debtOut;
+  S.cash+=opNet;
+  // taxes annually
+  let tax=0;
+  S.yearProfit+=opNet;
+  if(S.month%12===0){
+    if(S.yearProfit>0){tax=Math.round(S.yearProfit*0.21);S.cash-=tax;
+      queueInfo('🧾 Tax season','The year closed with '+fmt(S.yearProfit)+' in profit. The government would like its '+fmt(tax)+' now, please.',
+        'Profit isn\'t yours until taxes are set aside. Founders who treat the tax bill as a surprise get surprised out of business.');}
+    S.yearProfit=0;
+  }
+  // reputation
+  const q=quality();
+  let drep=(q-50)/14+loc.prestige*0.04;
+  if(units<demand*0.95)drep-=0.5;
+  if(drep>0&&S.trait==='craft')drep*=1.3;
+  S.rep=clamp(S.rep+drep,0,loc.repCap);
+  // dependence / freedom
+  const share=cap>0?ownerUnits/cap:1;
+  S.dep=clamp(Math.round(100*share*(1-S.systems/260)),3,100);
+  // streaks, energy, flags
+  S.profitStreak=opNet>0?S.profitStreak+1:0;
+  const wasVacation=S.forcedRest&&S.vacation;
+  S.energy=clamp(S.energy+(S.forcedRest?50:18),0,100);
+  S.grind=false;const hadRest=S.forcedRest;S.forcedRest=false;
+  if(S.lineCooldown>0)S.lineCooldown--;
+  // employee quit risk from denied raise
+  if(S.quitRisk&&S.staff.length>0&&Math.random()<0.4){
+    const p=S.staff.shift();S.quitRisk=false;
+    queueInfo('🚪 '+p.name+' took another offer','You said no to the raise. Someone else said yes. Their knowledge walked out the door with them.',
+      'Replacing someone costs 3–6 months of salary in lost output and retraining. The raise was the cheap option.');
+  }
+  S.lastR={revenue,collected,cogs,salaries,rent,opex,interest,debtOut,opNet,tax,units,demand,cap,ownerUnits};
+  S.history.push(S.cash);S.revHist.push(revenue);
+  if(S.history.length>80)S.history.shift();
+  // vacation test resolution
+  if(wasVacation){S.vacation=false;resolveVacation(opNet);render();save();return}
+  // events
+  const cashBeforeEv=S.cash;
+  runEvents();
+  S.evDelta=S.cash-cashBeforeEv;
+  // interest trap lesson
+  const cc=S.debts.find(d=>d.apr>=0.2);
+  if(cc&&cc.paidI>10000&&!S.ach.ccLesson){S.ach.ccLesson=1;
+    queueInfo('💳 A grim milestone','You have now paid over <b>$10,000 in interest</b> on your credit cards — and the balance is barely smaller than the day you started.',
+      'Minimum payments are designed to keep you exactly where you are. High-interest debt isn\'t funding — it\'s a subscription to stress. Attack the principal or it never ends.');}
+  // bankruptcy pressure
+  if(S.cash<0){S.negMonths++;
+    if(!S.paydayOffered&&S.cash>-15000){S.paydayOffered=true;
+      queueChoice('🆘 The cash ran out','You\'re '+fmt(-S.cash)+' in the hole. A "merchant cash advance" outfit is offering <b>$25,000 today</b> at a brutal 36% APR. Or you tighten everything and try to trade through it.',[
+        {label:'Take the $25K advance (36% APR)',fn(){S.cash+=25000;S.debts.push({name:'Cash advance',balance:25000,apr:0.36,minPay:1400,paidI:0});
+          lessonModal('Desperate money is the most expensive money','When you borrow from a position of weakness, the lender prices your desperation. This buys you months — at a rate designed to take the whole business if you stumble again.')}},
+        {label:'Refuse. Cut to the bone.',fn(){S.demandMult*=0.95;S.energy=clamp(S.energy-15,0,100);
+          lessonModal('Survival mode','You delayed every bill and called every customer who owed you. It might work. Cash discipline before the crisis is what makes this moment unnecessary.')}},
+      ]);}
+    if(S.cash<-15000||S.negMonths>=3){gameOver('bankrupt');return}
+  } else S.negMonths=0;
+  // month report
+  queueReport();
+  if(S.month>=72&&!S.won){gameOver('time');return}
+  pump();render();save();
+}
+
+/* ================= EVENTS ================= */
+function fired(id,cool){if(S.evCool[id]&&S.month-S.evCool[id]<cool)return true;return false}
+function mark(id){S.evCool[id]=S.month}
+function runEvents(){
+  if(Math.random()>0.55)return;
+  const biz=bizOf();
+  const pool=[];
+  const add=(id,w,cool,fn,cond)=>{if(!fired(id,cool)&&(cond===undefined||cond))pool.push({id,w,fn})};
+  add('viral',5,8,()=>{S.rep=clamp(S.rep+7,0,locOf().repCap);S.mktMonths=Math.max(S.mktMonths,2);
+    queueInfo('📱 You went viral','A post about '+S.brand+' blew up overnight. New faces everywhere, for now.',
+    'Virality spends reputation you already built. Luck favors brands that were already showing up.')},S.month>2);
+  add('quit',7,6,()=>{const p=S.staff.pop();
+    queueInfo('🚪 '+p.name+' quit','"I never really knew what I was doing here." Untrained people don\'t stay confused forever — they leave.',
+    'People don\'t quit jobs, they quit chaos. Training and systems aren\'t a cost center — they\'re retention.')},S.staff.length>0&&S.teamSkill<35&&S.month>4);
+  add('raise',6,9,()=>{const p=S.staff[0];
+    queueChoice('💼 '+p.name+' asks for a raise','Your best person wants 15% more. They\'ve earned it — and they know other shops are hiring.',[
+      {label:'Give the raise (+'+fmt(Math.round(p.salary*0.15))+'/mo)',fn(){p.salary=Math.round(p.salary*1.15);p.loyal=true;
+        lessonModal('Paying for loyalty','Keeping great people costs less than finding them. '+p.name+' just became someone who tells friends this is a great place to work.')}},
+      {label:'Say no — money\'s tight',fn(){S.quitRisk=true;
+        lessonModal('A quiet risk taken','Maybe they stay. But the door is now open, and recruiting them was the easy part. Watch this space.')}},
+    ])},S.staff.length>0&&S.month>5);
+  add('rent',5,12,()=>{S.rentMult*=1.12;
+    queueInfo('📜 Rent increase','Your landlord "loves what you\'ve done with the place." Rent is up 12%.',
+    'Fixed costs only move one direction on their own. Every dollar of rent must be re-earned every single month, forever.')},S.loc!=='home'&&S.month>8);
+  add('break',5,10,()=>{const hit=biz.key==='coffee'||biz.key==='fitness'?4000:1800;S.cash-=hit;
+    queueInfo('🔧 Equipment failure','Something critical died mid-rush. Emergency repair: '+fmt(hit)+'.',
+    'Stuff breaks on schedule — yours just isn\'t written down. Profitable businesses keep a maintenance reserve before they need it.')},S.month>3);
+  add('wholesale',5,10,()=>{const amt=Math.round(lastRevAvgFn()*1.6);
+    queueChoice('📦 A big wholesale order','A major buyer wants a bulk order worth <b>'+fmt(amt)+'</b> — at standard wholesale terms: 45% off, paid <b>net-60</b> (two months from now).',[
+      {label:'Take it — big logo, big volume',fn(){const net=Math.round(amt*0.55);S.receivables.push({month:S.month+2,amount:net});
+        S.energy=clamp(S.energy-15,0,100);
+        lessonModal('Revenue is not cash','You just did the work and paid for the materials — and the money arrives in 60 days. Growth eats cash before it feeds you. This is how profitable companies die.')}},
+      {label:'Pass — protect margin and cash',fn(){lessonModal('The discipline of "no"','Volume that breaks your cash cycle isn\'t growth, it\'s a loan you made to a bigger company. Knowing your numbers means knowing when to pass.')}},
+    ])},S.month>6&&(biz.key==='fashion'||biz.key==='coffee'||biz.key==='creator'));
+  add('press',4,10,()=>{
+    queueChoice('📰 A journalist is writing the story','A feature on local businesses is going to print. A PR consultant can guarantee you\'re the centerpiece — for $3,000.',[
+      {label:'Pay the $3,000',fn(){S.cash-=3000;S.rep=clamp(S.rep+9,0,locOf().repCap);
+        lessonModal('Buying attention','Reputation compounds. Sometimes the shortcut is worth it — as long as the product behind it holds.')}},
+      {label:'Skip it',fn(){if(Math.random()<0.5){S.rep=clamp(S.rep+3,0,locOf().repCap);
+          lessonModal('Free press','They wrote about you anyway — a smaller mention, but free. Not every opportunity needs to be bought.')}
+        else lessonModal('The quiet path','The piece ran without you. Fine. Press is a multiplier, not a foundation.')}},
+    ])},S.rep>30);
+  add('copycat',4,12,()=>{S.demandMult*=0.88;
+    queueInfo('👯 A copycat appeared','Someone opened a suspiciously familiar business across town. They\'re undercutting you on price.',
+    'Competition copies your product, never your relationships or your systems. The moat was never the idea.')},S.month>10&&S.rep>35);
+  add('fnf',9,99,()=>{S.fnfAsked=true;
+    queueChoice('👪 The family dinner','Your uncle finally asks, gently, about the $40,000. Nobody else at the table looks up from their plate.',[
+      {label:'Start repaying $1,000/mo',fn(){const d=S.debts.find(x=>x.name==='Family loan');if(d)d.minPay=1000;
+        lessonModal('Clean money, clean conscience','Family money has zero interest and infinite emotional APR. A repayment plan converts an awkward dinner into a proud one.')}},
+      {label:'"Soon, I promise"',fn(){S.rep=clamp(S.rep-4,0,100);S.energy=clamp(S.energy-10,0,100);
+        lessonModal('The invisible interest','The loan costs you nothing on paper and something every night. Unstructured obligations are still obligations.')}},
+    ])},S.fund==='fnf'&&!S.fnfAsked&&S.month>=15);
+  add('investor',8,7,()=>{
+    queueChoice('😇 Investor check-in','Your angel reviews the numbers. "Growth is slower than we modeled. I want to see you put <b>$6,000</b> into acquisition this month."',[
+      {label:'Spend the $6,000 on growth',fn(){S.cash-=6000;S.mktMonths=Math.max(S.mktMonths,3);
+        lessonModal('Other people\'s money has opinions','That check you cashed came with a voice in the room. Sometimes the push is right — but you no longer get to decide alone.')}},
+      {label:'Hold the line on your plan',fn(){S.investorTrust-=20;
+        lessonModal('Spending trust instead of cash','You kept the cash and paid in confidence. Investor trust is a real balance — it determines whether the next round, or the next favor, exists.')}},
+    ])},S.fund==='angel'&&S.month-S.lastInvCheck>=8&&(S.lastInvCheck=S.month,true));
+  if(!pool.length)return;
+  const total=pool.reduce((a,e)=>a+e.w,0);
+  let r=Math.random()*total;
+  for(const e of pool){r-=e.w;if(r<=0){mark(e.id);e.fn();break}}
+}
+function lastRevAvgFn(){const h=S.revHist.slice(-3);return h.length?h.reduce((a,b)=>a+b,0)/h.length:5000}
+
+/* ================= MODALS ================= */
+function openModal(html){$('modalBox').innerHTML=html;$('modalRoot').classList.add('on')}
+function closeModal(){$('modalRoot').classList.remove('on');pump()}
+function pump(){
+  if(!MQ.length)return;
+  const m=MQ.shift();
+  if(m.type==='info'){
+    openModal(`<h3>${m.title}</h3><div class="body">${m.body}</div>${m.lesson?`<div class="lesson">${m.lesson}</div>`:''}
+      <div class="btns"><button class="btn" onclick="closeModal()">Continue</button></div>`);
+  }else if(m.type==='choice'){
+    window.__choices=m.choices;
+    openModal(`<h3>${m.title}</h3><div class="body">${m.body}</div>
+      <div class="btns">${m.choices.map((c,i)=>`<button class="btn ${i>0?'ghost':''}" onclick="pickChoice(${i})">${c.label}</button>`).join('')}</div>`);
+  }else if(m.type==='html'){
+    openModal(m.html);
+  }
+}
+function pickChoice(i){
+  const c=window.__choices[i];
+  $('modalRoot').classList.remove('on');
+  c.fn();render();save();
+  pump();
+}
+function queueInfo(title,body,lesson){if(lesson&&!S.lessons.includes(lesson))S.lessons.push(lesson);MQ.push({type:'info',title,body,lesson})}
+function queueChoice(title,body,choices){MQ.push({type:'choice',title,body,choices})}
+function lessonModal(title,lesson){queueInfo(title,'',lesson)}
+function queueReport(){
+  const r=S.lastR;
+  const line=(k,v,neg)=>v?`<tr><td>${k}</td><td style="color:${neg?'var(--bad)':'inherit'}">${neg?'−':''}${fmt(Math.abs(v))}</td></tr>`:'';
+  const missed=r.demand>r.cap*1.05?`<div class="lesson" style="margin-top:14px">Demand was ${Math.round(r.demand)} ${bizOf().unit} but you could only serve ${Math.round(r.cap)}. Customers you turn away today buy from someone else tomorrow — capacity is a growth decision.</div>`:'';
+  MQ.push({type:'html',html:`<h3>Month ${S.month} — ${monthName()}</h3>
+    <table class="pl">
+      ${line('Revenue ('+Math.round(r.units)+' '+bizOf().unit+')',r.revenue)}
+      ${line('Wholesale payment received',r.collected)}
+      ${line('Cost of goods',-r.cogs,true)}
+      ${line('Salaries',-r.salaries,true)}
+      ${line('Rent',-r.rent,true)}
+      ${line('Operations',-r.opex,true)}
+      ${line('Debt payments (incl. '+fmt(r.interest)+' interest)',-r.debtOut,true)}
+      ${line('Taxes',-r.tax,true)}
+      ${S.evDelta?line('Events & decisions',S.evDelta,S.evDelta<0):''}
+      <tr class="net"><td>Net</td><td style="color:${r.opNet>=0?'var(--good)':'var(--bad)'}">${fmt(r.opNet)}</td></tr>
+    </table>${missed}
+    <div class="btns"><button class="btn" onclick="closeModal()">Next month →</button></div>`});
+}
+function monthName(){const m=['January','February','March','April','May','June','July','August','September','October','November','December'];return m[(S.month-1)%12]+', Year '+Math.ceil(S.month/12)}
+
+/* ================= WIN / LOSE ================= */
+function eligible(){return 100-S.dep>=65&&S.systems>=50&&S.profitStreak>=3}
+function startVacation(){
+  queueChoice('🌅 The 30-Day Test','You book the trip. Phone off, laptop home. For thirty days, '+S.brand+' is on its own — your team, your systems, your reputation. Whatever you actually built.<br><br>If it profits without you: <b>you\'ve escaped the rat race.</b>',[
+    {label:'Turn off the phone. Go.',fn(){S.vacation=true;S.forcedRest=true;endMonth()}},
+    {label:'Not yet — one more month of prep',fn(){}},
+  ]);
+  pump();
+}
+function resolveVacation(net){
+  if(net>0){winGame(net)}
+  else{
+    queueInfo('📞 The business missed you','You came home to '+fmt(net)+' in losses and a team that kept calling. Close — but it still needs your hands.<br><br>More systems. More training. Try again.',
+      'The 30-day test doesn\'t lie. If the business can\'t run a month without you, you don\'t own a business — you own a job with extra steps.');
+    queueReport();pump();
+  }
+}
+function winGame(net){
+  S.won=true;S.over=true;
+  const avgP=S.revHist.slice(-6).reduce((a,b)=>a+b,0)/6*0.25;
+  const valuation=Math.max(0,Math.round(avgP*36));
+  const yourShare=Math.round(valuation*S.equity)+Math.max(0,Math.round(S.cash));
+  const grade=S.month<=30?'S':S.month<=42?'A':S.month<=56?'B':'C';
+  confetti();
+  MQ.push({type:'html',html:`<h3>🗽 You escaped the rat race</h3>
+    <div class="body">While you were on a beach, <b>${S.brand}</b> made <b style="color:var(--good)">${fmt(net)}</b> without you. The machine runs. You are no longer the engine — you're the owner.</div>
+    <div class="summList">
+      <div class="row"><span>Time to freedom</span><b>${S.month} months</b></div>
+      <div class="row"><span>Founder grade</span><b style="color:var(--ac)">${grade}</b></div>
+      <div class="row"><span>Business valuation</span><b>${fmt(valuation)}</b></div>
+      <div class="row"><span>Your stake (${Math.round(S.equity*100)}%) + cash</span><b style="color:var(--good)">${fmt(yourShare)}</b></div>
+      <div class="row"><span>Team built</span><b>${S.staff.length} people</b></div>
+      <div class="row"><span>Lessons collected</span><b>${S.lessons.length}</b></div>
+    </div>
+    ${lessonRecap()}
+    <div class="btns"><button class="btn" onclick="restart()">Play Again — try a different path</button><button class="btn ghost" onclick="closeModal()">Keep playing this empire</button></div>`});
+  pump();
+  S.over=false; // allow sandbox continue
+}
+function gameOver(kind){
+  S.over=true;
+  const msgs={
+    bankrupt:['💀 Bankruptcy','The money ran out and stayed out. The landlord changed the locks. '+S.brand+' is a story now, not a business.','Cash is oxygen. Profitable companies suffocate all the time — they just confuse the P&L for the bank account.'],
+    burnout:['🥀 Total Burnout','Third collapse. Your body made the decision your calendar refused to. '+S.brand+' can\'t run without you — and now neither can you.','A business built entirely on your own back has a load limit: yours. Freedom was always the metric that mattered.'],
+    time:['⏳ Six Years Later','Seventy-two months in, '+S.brand+' is still standing — and still strapped to your back. Not a failure. Not freedom either.','The rat race doesn\'t end with time served. It ends with systems, people, and the courage to step away.'],
+  };
+  const m=msgs[kind];
+  MQ.push({type:'html',html:`<h3>${m[0]}</h3><div class="body">${m[1]}</div><div class="lesson">${m[2]}</div>
+    <div class="summList">
+      <div class="row"><span>Months survived</span><b>${S.month}</b></div>
+      <div class="row"><span>Peak cash</span><b>${fmt(Math.max(...S.history))}</b></div>
+      <div class="row"><span>Final freedom</span><b>${100-S.dep}%</b></div>
+      <div class="row"><span>Lessons collected</span><b>${S.lessons.length}</b></div>
+    </div>
+    ${lessonRecap()}
+    <div class="btns"><button class="btn" onclick="restart()">Run It Back</button></div>`});
+  pump();render();
+  localStorage.removeItem('fm_save');
+}
+function lessonRecap(){
+  if(!S.lessons.length)return'';
+  return `<div style="margin-top:18px"><div style="font-size:10px;letter-spacing:.25em;color:var(--ac);margin-bottom:10px">💡 WHAT THIS RUN TAUGHT YOU</div>
+    ${S.lessons.slice(0,8).map(l=>`<div style="font-size:12.5px;color:var(--dim);padding:7px 0;border-bottom:1px dashed var(--line);line-height:1.5">${l}</div>`).join('')}</div>`;
+}
+function restart(){localStorage.removeItem('fm_save');location.reload()}
+
+/* ================= RENDER ================= */
+let dispCash=null;
+function render(){
+  if(!S)return;
+  const biz=bizOf(),tr=trOf();
+  document.querySelector('#brandTitle .em').textContent=biz.emoji;
+  document.querySelector('#brandTitle .nm').textContent=S.brand;
+  $('monthChip').textContent=S.month===0?'Opening Month':'Month '+S.month+' · Yr '+Math.ceil(Math.max(1,S.month)/12);
+  // level
+  const avg=S.revHist.slice(-3);const a3=avg.length?avg.reduce((x,y)=>x+y,0)/avg.length:0;
+  let lvl=LEVELS[0][1];for(const[th,n]of LEVELS)if(a3>=th)lvl=n;
+  $('levelChip').textContent=lvl;
+  // cash ticker
+  animCash();
+  // you panel
+  document.querySelector('#youHead .av2').textContent=S.avatar;
+  document.querySelector('#youHead .nm').textContent=S.name;
+  document.querySelector('#youHead .tr').textContent=tr.emoji+' '+tr.name;
+  setBar('Energy',S.energy);setBar('Free',100-S.dep);
+  setBar('Rep',Math.round(S.rep));setBar('Skill',S.teamSkill);setBar('Sys',S.systems);
+  $('depNote').textContent=S.dep>70?'The business is basically you in a trench coat. Build team + systems.':S.dep>40?'Getting there — the machine does some of the work now.':'The machine mostly runs itself. This is what ownership feels like.';
+  // team
+  $('teamList').innerHTML=S.staff.length?S.staff.map(p=>`<div class="teamline"><span><b>${p.name}</b> · ${p.role}${p.loyal?' 💛':''}</span><span>${fmt(p.salary)}/mo</span></div>`).join(''):'<div style="font-size:12px;color:var(--dim)">No team yet. It\'s all you.</div>';
+  // debts
+  $('debtList').innerHTML=S.debts.map(d=>`<div class="debtline"><span>${d.name} · ${Math.round(d.apr*100)}%</span><b>${fmt(d.balance)}</b></div>`).join('');
+  // checklist
+  const free=100-S.dep;
+  const cks=[['Freedom ≥ 65',free>=65,free+'/65'],['Systems ≥ 50',S.systems>=50,S.systems+'/50'],['3 profitable months in a row',S.profitStreak>=3,Math.min(S.profitStreak,3)+'/3'],['Pass The 30-Day Test',S.won,S.won?'DONE':'—']];
+  $('checks').innerHTML=cks.map(c=>`<div class="ck ${c[1]?'done':''}"><span class="box">${c[1]?'✓':''}</span><span>${c[0]}</span><span style="margin-left:auto;font-variant-numeric:tabular-nums">${c[2]}</span></div>`).join('');
+  // actions
+  $('energyHint').innerHTML='⚡ <b>'+S.energy+'</b> energy to spend this month. Actions now, then END MONTH to see what happens.';
+  $('staffChip').textContent=S.staff.length+' staff · '+fmt(S.staff.reduce((a,p)=>a+p.salary,0))+'/mo payroll';
+  let html=ACTIONS.map(a=>{
+    const ok=(!a.can||a.can())&&S.energy>=a.en&&S.cash>=a.cash&&!S.over;
+    return `<button class="act ${ok?'':'off'}" onclick="tryAction('${a.key}')">
+      <div class="em">${a.emoji}</div><h5>${a.name}</h5><p>${a.desc}</p>
+      <div class="cost">${a.en?`<span>⚡ ${a.en}</span>`:''}${a.cash?`<span>${fmt(a.cash)}</span>`:''}</div></button>`;
+  }).join('');
+  if(eligible()&&!S.won)html+=`<button class="act special" onclick="startVacation()">
+    <div class="em">🌅</div><h5>THE 30-DAY TEST</h5><p>You qualify. Take a full month off. If the business profits without you — you win.</p>
+    <div class="cost"><span style="color:var(--ac)">The final exam</span></div></button>`;
+  $('actionsGrid').innerHTML=html;
+  $('endBtn').disabled=!!S.over&&!S.won;
+  // P&L side
+  if(S.lastR){const r=S.lastR;
+    const row=(k,v,neg)=>v?`<tr><td>${k}</td><td style="color:${neg?'var(--bad)':'inherit'}">${neg?'−':''}${fmt(Math.abs(v))}</td></tr>`:'';
+    $('plTable').innerHTML=row('Revenue',r.revenue)+row('COGS',-r.cogs,1)+row('Salaries',-r.salaries,1)+row('Rent',-r.rent,1)+row('Ops',-r.opex,1)+row('Debt svc',-r.debtOut,1)+row('Tax',-r.tax,1)+
+      `<tr class="net"><td>Net</td><td style="color:${r.opNet>=0?'var(--good)':'var(--bad)'}">${fmt(r.opNet)}</td></tr>`;
+  }
+  drawSpark();
+  // log
+  $('logLines').innerHTML=S.log.slice(0,30).map(l=>`<div class="logline"><b>${l[0]}</b> — ${l[1]}</div>`).join('');
+  // achievements
+  checkAch();
+}
+function setBar(k,v){$('v'+k).textContent=Math.round(v)+(k==='Free'?'%':'');$('b'+k).style.width=clamp(v,0,100)+'%'}
+function animCash(){
+  const target=Math.round(S.cash);
+  if(dispCash===null)dispCash=target;
+  const el=$('cashVal');
+  const step=()=>{
+    const diff=target-dispCash;
+    if(Math.abs(diff)<1){dispCash=target}
+    else{dispCash+=diff*0.18;requestAnimationFrame(step)}
+    el.textContent=fmt(dispCash);
+    el.style.color=target<0?'var(--bad)':target<5000?'#fbbf24':'var(--txt)';
+  };
+  step();
+}
+function drawSpark(){
+  const c=$('spark');const dpr=window.devicePixelRatio||1;
+  const w=c.clientWidth||280,h=64;c.width=w*dpr;c.height=h*dpr;
+  const x=c.getContext('2d');x.scale(dpr,dpr);x.clearRect(0,0,w,h);
+  const d=S.history;if(d.length<2)return;
+  const min=Math.min(...d,0),max=Math.max(...d,1);
+  const px=i=>i/(d.length-1)*(w-4)+2;
+  const py=v=>h-4-(v-min)/(max-min||1)*(h-10);
+  // zero line
+  if(min<0){x.strokeStyle='rgba(255,255,255,.12)';x.setLineDash([3,3]);x.beginPath();x.moveTo(0,py(0));x.lineTo(w,py(0));x.stroke();x.setLineDash([])}
+  x.beginPath();d.forEach((v,i)=>i?x.lineTo(px(i),py(v)):x.moveTo(px(i),py(v)));
+  const ac=getComputedStyle(document.documentElement).getPropertyValue('--ac').trim();
+  x.strokeStyle=ac;x.lineWidth=2;x.lineJoin='round';x.stroke();
+  x.lineTo(px(d.length-1),h);x.lineTo(px(0),h);x.closePath();
+  const g=x.createLinearGradient(0,0,0,h);g.addColorStop(0,ac+'44');g.addColorStop(1,ac+'00');
+  x.fillStyle=g;x.fill();
+}
+function logLine(m,t){S.log.unshift([m,t])}
+function toast(t){
+  const e=document.createElement('div');e.className='toast';e.textContent=t;
+  $('toastRoot').appendChild(e);setTimeout(()=>e.remove(),3200);
+}
+function checkAch(){
+  const a=S.ach;
+  const give=(k,t)=>{if(!a[k]){a[k]=1;toast('🏆 '+t)}};
+  if(S.revHist.length&&S.revHist[S.revHist.length-1]>0)give('firstSale','First Revenue');
+  if(S.cash>=100000)give('c100','$100K in the Bank');
+  if(S.rep>=75)give('rep75','Reputation 75 — people talk about you');
+  if(100-S.dep>=50)give('free50','Freedom 50 — half the business runs itself');
+  if(S.systems>=50)give('sys50','Systems 50 — it\'s written down');
+}
+function confetti(){
+  const ems=['🎉','✨','💸','🥂','🗽','💛'];
+  for(let i=0;i<70;i++){
+    const e=document.createElement('div');e.className='confetti';e.textContent=rnd(ems);
+    e.style.left=Math.random()*100+'vw';
+    e.style.animationDuration=(2+Math.random()*2.5)+'s';
+    e.style.animationDelay=(Math.random()*0.8)+'s';
+    document.body.appendChild(e);setTimeout(()=>e.remove(),5500);
+  }
+}
+
+/* ================= SAVE ================= */
+function save(){try{localStorage.setItem('fm_save',JSON.stringify(S))}catch(e){}}
+function continueGame(){
+  try{S=JSON.parse(localStorage.getItem('fm_save'));
+    document.documentElement.style.setProperty('--ac',bizOf().accent);
+    show('sc-game');render();
+  }catch(e){toast('Save corrupted — starting fresh');newGame()}
+}
+(function init(){
+  if(localStorage.getItem('fm_save'))$('contBtn').style.display='inline-block';
+})();
+/* PWA: offline cache (registers only on https, e.g. the hosted version) */
+if('serviceWorker' in navigator&&location.protocol==='https:'){
+  navigator.serviceWorker.register('sw.js');
+}
+</script>
+</body>
+</html>
